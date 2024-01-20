@@ -10,6 +10,7 @@ from datetime import datetime, time
 from sqlalchemy.sql.expression import func
 import locale
 import base64
+import copy
 
 class LoginForm(FlaskForm):
     nom = StringField('Nom')
@@ -55,10 +56,21 @@ def byte_to_image(byte):
 
 @app.route("/")
 def home():
-    festivals = Festival.query.filter(Festival.finFest >= datetime.now().date()).order_by(Festival.finFest).all()
+    festivals = []
     groupes = []
-    for festival in festivals:
+    for festival in Festival.query.filter(Festival.finFest >= datetime.now().date()).order_by(Festival.finFest).all():
+        min_dateheure = Event.query.filter(Event.idFestival == festival.idFestival).with_entities(func.min(Event.dateHeureDebutEvent)).scalar()
+        max_dateheure = Event.query.filter(Event.idFestival == festival.idFestival).with_entities(func.max(Event.dateHeureFinEvent)).scalar()
+
+        if min_dateheure is None or max_dateheure is None:
+            continue
+
+        festival_temp = copy.copy(festival)
+        festival_temp.debutFest = min_dateheure
+        festival_temp.finFest = max_dateheure
         
+        festivals.append(festival_temp)
+
         groupes_festival = Groupe.query.select_from(Event).filter(Event.idFestival == festival.idFestival).all()
         if len(groupes) <= 5:
             groupes.extend(groupes_festival)

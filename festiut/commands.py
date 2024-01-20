@@ -16,6 +16,7 @@ def loaddb():
         Utilisateur(nom="adm", password="86f65e28a754e1a71b2df9403615a6c436c32c42a75a10d02813961b86f1e428", monRole="Admin"),
         Utilisateur(nom="user", password="04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb", monRole="Utilisateur")
     ])
+    db.session.commit()
 
     # Insertion des festivals
     print("Inserting festivals...")
@@ -23,6 +24,7 @@ def loaddb():
         Festival(nomFestival="FestIUT'O", villeFestival="Orléans", codePostalFestival="45000", debutFest="2024-01-20", finFest="2024-01-23"),
         Festival(nomFestival="FestIUT'P", villeFestival="Paris", codePostalFestival="75000", debutFest="2025-01-20", finFest="2025-01-22")
     ])
+    db.session.commit()
 
     # Insertion des events
     print("Inserting events...")
@@ -31,6 +33,7 @@ def loaddb():
         Event(idFestival=1, nomEvent="Interviews de groupe", typeEvent="interview", dateHeureDebutEvent="2025-01-20 10:00:00", dateHeureFinEvent="2025-01-20 12:00:00", estGratuit=False, adresseEvent="1 rue de la Paix", nbPlaceEvent=25),
         Event(idFestival=1, nomEvent="La pluie", typeEvent="Show case", dateHeureDebutEvent="2025-01-21 20:00:00", dateHeureFinEvent="2025-01-21 22:00:00", estGratuit=False, adresseEvent="2 rue de la Paix", nbPlaceEvent=0),
     ])
+    db.session.commit()
 
     # Insertion des groupes
     print("Inserting groups...")
@@ -38,6 +41,7 @@ def loaddb():
         Groupe(nomGroupe="La pluie"),
         Groupe(nomGroupe="L'orage")
     ])
+    db.session.commit()
 
     # Insertion des artistes
     db.session.add_all([
@@ -45,5 +49,4 @@ def loaddb():
         Artiste(nomArtiste="M. Pluie", nomGroupe="La pluie", styleArtiste="Rap Pop", urlInstaArtiste="https://www.instagram.com/mpluie/", urlYoutubeArtiste="https://www.youtube.com/channel/UCZpX9r7l2Z5Xf5VwXW8kD3g"),
         Artiste(nomArtiste="M. Orage", nomGroupe="L'orage", styleArtiste="Classique", urlInstaArtiste="https://www.instagram.com/morage/", urlYoutubeArtiste="https://www.youtube.com/channel/UCZpX9r7l2Z5Xf5VwXW8kD3g")
     ])
-    
     db.session.commit()
