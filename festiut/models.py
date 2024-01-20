@@ -1,5 +1,6 @@
 from .app import db, login_manager
 from flask_login import UserMixin
+from datetime import datetime, time
 
 class Utilisateur(db.Model, UserMixin):
     nom = db.Column(db.String(25), primary_key=True, default="Utilisateur")
@@ -17,6 +18,16 @@ class Festival(db.Model):
     debutFest = db.Column(db.DateTime, nullable=False)
     finFest = db.Column(db.DateTime, nullable=False)
     imageFestival = db.Column(db.LargeBinary(length=(2**32)-1), nullable=True)
+
+    def ajouter_nouveau_festival(nomFestival, villeFestival, codePostalFestival, debutFest, finFest, imageFestival):
+        debutFest = datetime.combine(datetime.strptime(debutFest, "%Y-%m-%d"), time(0,0))
+        finFest = datetime.combine(datetime.strptime(finFest, "%Y-%m-%d"), time(0,0))
+        if Festival.query.filter(Festival.nomFestival == nomFestival).first() is not None:
+            return None
+        festival = Festival(nomFestival=nomFestival, villeFestival=villeFestival, codePostalFestival=codePostalFestival, debutFest=debutFest, finFest=finFest, imageFestival=imageFestival)
+        db.session.add(festival)
+        db.session.commit()
+        return festival
 
 class Event(db.Model):
     idEvent = db.Column(db.Integer, primary_key=True, nullable=False)

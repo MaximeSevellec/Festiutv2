@@ -11,6 +11,7 @@ from sqlalchemy.sql.expression import func
 import locale
 import base64
 import copy
+from sqlalchemy.orm import joinedload
 
 class LoginForm(FlaskForm):
     nom = StringField('Nom')
@@ -37,7 +38,7 @@ class RegisterForm(FlaskForm):
         user = Utilisateur(nom=self.nom.data, password=passwd, monRole="Utilisateur")
         save_user(user)
         return user
-
+    
 @login_manager.user_loader
 def load_user(nom):
     return Utilisateur.query.get(nom)
@@ -71,8 +72,8 @@ def home():
         
         festivals.append(festival_temp)
 
-        groupes_festival = Groupe.query.select_from(Event).filter(Event.idFestival == festival.idFestival).all()
         if len(groupes) <= 5:
+            groupes_festival = Groupe.query.join(Event, Groupe.nomGroupe == Event.nom_groupe).filter(Event.idFestival == festival.idFestival).all()
             groupes.extend(groupes_festival)
     return render_template("home.html", festivals=festivals, groupes=groupes)
 
@@ -93,7 +94,7 @@ def festival(idFestival):
 @app.route("/groupe/<string:nomGroupe>/")
 def groupe(nomGroupe):
     groupe = Groupe.query.get(nomGroupe)
-    artistes = Artiste.query.select_from(Groupe).filter(Groupe.nomGroupe == nomGroupe).all()
+    artistes = Artiste.query.join(Groupe).filter(Groupe.nomGroupe == nomGroupe).all()
     return render_template("groupe.html", groupe=groupe, artistes=artistes)
 
 @app.route("/event/<string:nomArtiste>/")
@@ -225,7 +226,9 @@ def ajouter_nouveau_groupe():
     if fichier:
         byte = fichier.read()
 
-    if Groupe.ajouter_nouveau_groupe(nomGroupe=data['nomGroupe'], imageGroupe=byte) is not None:
+    groupe = data['nomGroupe'] if 'nomGroupe' in data.keys() else None
+
+    if Groupe.ajouter_nouveau_groupe(nomGroupe=groupe, imageGroupe=byte) is not None:
         return jsonify({'success': True})
 
     return jsonify({'success': False, 'message': "Le groupe est déjà dans la base de données"})
