@@ -57,9 +57,23 @@
 }
 
 footer{
+    position: fixed;
+    bottom: 0%;
+    width: 100%;
     text-align: center;
-    padding: 1em;
-    background-color: #f4f4f4;
-    box-shadow: 0 0.2em 0.4em rgba(0, 0, 0, 0.3);
-    border-radius: 0.4em;
+    padding: 0.2em;
+    padding-bottom: 0.5em;
+    background-color: #f6f6f6;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3); /* Ajout d'une ombre */
+}
+
+footer>p{
+    color: rgb(122, 122, 122);
+}
+
+.grid{
+    font-size: 110%;
+    display: flex;
+    padding-top: 1%;
+    
 }
