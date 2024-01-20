@@ -1,0 +1,24 @@
+.placementBillet {
+    padding-top: 10%;
+    display: flex;
+    justify-content: center; /* Centre les éléments horizontalement */
+}
+
+.billet {
+    margin: 0 10px; /* Ajoute une marge autour de chaque billet */
+}
+
+.div_img {
+    width: 85%;
+    height: auto;
+    box-sizing: border-box;
+    object-fit: cover;
+    padding: 20px;
+    margin: 0 auto; /* Centre les éléments horizontalement */
+}
+
+.img_acc {
+    width: 100%;
+    height: auto;
+    display: block;
+}

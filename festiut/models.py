@@ -88,6 +88,16 @@ class Billet(db.Model):
     prixBillet = db.Column(db.Float, nullable=False)
     nbPlaceBillet = db.Column(db.Integer, default=1)
 
+    def acheter_billet(nomUtilisateur, idFestival, dateAchat, debutBillet, finBillet, prixBillet, nbPlaceBillet):
+        try:
+            billet = Billet(nomUtilisateur=nomUtilisateur, idFestival=idFestival, dateAchat=dateAchat, debutBillet=debutBillet, finBillet=finBillet, prixBillet=prixBillet, nbPlaceBillet=nbPlaceBillet)
+            db.session.add(billet)
+            db.session.commit()
+            return True
+        except Exception as e:
+            print(e)
+            return False
+    
 class Logement(db.Model):
     idLogement = db.Column(db.Integer, primary_key=True, nullable=False)
     idFestival = db.Column(db.Integer, db.ForeignKey('festival.idFestival'), nullable=False)

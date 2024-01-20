@@ -102,6 +102,34 @@ def artiste(nomArtiste):
     artiste = Artiste.query.get(nomArtiste)
     return render_template("artiste.html", artiste=artiste)
 
+@app.route("/billeterie/")
+def billeterie():
+    billet_jour = {"Journée" : "20€", "2 jours" : "35", "Totalité du festival" : "50€"}
+        
+        
+    return render_template("billeterie.html", billet_jour=billet_jour)
+
+@app.route("/info_billet/<string:nomBillet>/")
+def info_billet(nomBillet):
+    festival = Festival.query.get(1)    
+    idFestival = festival.idFestival
+    if festival:
+
+        debut_festival = festival.debutFest
+        fin_festival = festival.finFest
+
+        duree_festival = (fin_festival - debut_festival).days + 1
+
+        jours_dispo = [debut_festival + timedelta(days=i) for i in range(duree_festival)]
+        print(jours_dispo)
+
+    return render_template("info_billet.html",nomBillet=nomBillet, jours_dispo=jours_dispo )
+
+@app.template_filter('datetime_format')
+def datetime_format(value, format='%A %d %B à %Hh%M'):
+    return value.strftime(format) if value else ''
+
+
 app.route("/programme/<int:idFestival>/<dateHeureDebutEvent>/")
 def programme(idFestival, dateHeureDebutEvent):
         events = Event.query.filter(Event.idFestival == idFestival, Event.dateHeureDebutEvent == dateHeureDebutEvent, Event.dateHeureDebutEvent < dateHeureDebutEvent + timedelta(days=1)).order_by(Event.dateHeureDebutEvent).all()
