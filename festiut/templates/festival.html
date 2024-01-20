@@ -6,7 +6,6 @@
 {% block main %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/festival.css')}}">
 
-    <p>Festival numéro°{{ festival.idFestival }}</p>
     <p>{{ festival.nomFestival }}</p>
     <p>{{ festival.villeFestival }} {{ festival.codePostalFestival }}</p>
     <p>Du {{ festival.debutFest | datetime }}</p>

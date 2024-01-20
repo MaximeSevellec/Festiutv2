@@ -81,7 +81,6 @@ def festival(idFestival):
     festival = Festival.query.get(idFestival)
     events = Event.query.filter(Event.idFestival == idFestival).order_by(Event.dateHeureDebutEvent).all()
     groupes = Groupe.query.select_from(Event).filter(Event.idFestival == idFestival).all()
-    modifiable = Billet.query.filter(Billet.idFestival == festival.idFestival).first()
 
     events_by_day = {}
     for event in events:
