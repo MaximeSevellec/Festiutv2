@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+<title>{{ title }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+    <div id="wrapper">
+        <header id="header">
+            <nav id="navbar">
+                <div class="left">
+                    <a class="logo" href="{{ url_for('home') }}">FestIUT'O</a>
+                    <a class="lien" href="">Billeterie</a>
+                    <a class="lien" href="">Programme</a>
+                </div>
+                <div class="right">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('logout') }}"><img class="user" src="{{ url_for('static', filename='image/logout.png') }}"></a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}"><img class="user" src="{{ url_for('static', filename='image/utilisateur.png') }}"></a>
+                    {% endif %}
+                </div>
+            </nav>
+        </header>
+        <main id="main">
+            <div class="container">
+                {% block main %}{% endblock %}
+            </div>
+        </main>
+        <footer id="footer">
+            <p> Copyright © Tous droits réservés - FestIUT'O </p>
+            <div class="grid">
+                <p>OZOCAK Ibrahim</p>
+                <p>SEVELLEC Maxime</p>
+                <p>BRISSET Léo</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

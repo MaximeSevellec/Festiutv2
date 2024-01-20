@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block styles %}
+{{ super() }}
+{% endblock %}
+{% block main %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/festival.css')}}">
+
+<p>Festival numéro°{{ festival.idFestival }}</p>
+<p>{{ festival.nomFestival }}</p>
+<p>{{ festival.villeFestival }} {{ festival.codePostalFestival }}</p>
+<p>Du {{ festival.debutFest | datetime }}</p>
+<p>Jusqu'au {{ festival.finFest | datetime }}</p>
+{{ festival.imageFestival | byte_to_image | safe }}
+
+<h1>Programmes du festival</h1>
+
+{% for event in events %}
+    <div class="event">
+        <a class="evt" href="#">
+            nomEvent = db.Column(db.String(25), nullable=False)
+            typeEvent = db.Column(db.String(25), nullable=False)
+            dateEvent = db.Column(db.Date, nullable=False)
+            heureDebutEvent = db.Column(db.Time, nullable=False)
+            heureFinEvent = db.Column(db.Time, nullable=False)
+            estGratuit = db.Column(db.Boolean, nullable=False)
+            adresseEvent = db.Column(db.String(25), nullable=False)
+            nbPlaceEvent = db.Column(db.Integer, nullable=False)
+            imageEvent = db.Column(db.LargeBinary(length=(2**32)-1), nullable=True)
+        </a>
+    </div>
+{% endfor %}
+
+<h1>Groupes présents au festival</h1>
+
+{% endblock %}
