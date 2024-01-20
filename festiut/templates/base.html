@@ -17,6 +17,9 @@
                 </div>
                 <div class="right">
                     {% if current_user.is_authenticated %}
+                        {% if current_user.role == 'Admin' %}
+                        <a href="{{ url_for('ajouter_groupe_artiste') }}">Ajouter un Artiste/Groupe</a>
+                        {% endif %}
                         <a href="{{ url_for('logout') }}"><img class="user" src="{{ url_for('static', filename='image/logout.png') }}"></a>
                     {% else %}
                         <a href="{{ url_for('login') }}"><img class="user" src="{{ url_for('static', filename='image/utilisateur.png') }}"></a>

@@ -1,12 +1,12 @@
 from markupsafe import Markup
 from .app import app, login_manager
-from flask import render_template,request, redirect, url_for
+from flask import render_template,request, redirect, url_for, jsonify
 from .models import *
 from hashlib import sha256
 from flask_login import login_user, current_user, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
-from datetime import datetime, time
+from datetime import datetime, timedelta
 from sqlalchemy.sql.expression import func
 import locale
 import base64
@@ -183,3 +183,49 @@ def register():
 def logout ():
     logout_user()
     return redirect(url_for('home'))
+
+@app.route("/ajouter_groupe_artiste")
+def ajouter_groupe_artiste():
+    if not current_user.is_authenticated or current_user.role != "Admin":
+        return redirect(url_for("home"))
+    groupes = Groupe.query.all()
+    return render_template("ajouter_groupe_artiste.html", groupes=groupes)
+
+@app.route('/ajouter_nouveau_artiste', methods=['POST'])
+def ajouter_nouveau_artiste():
+
+    data = request.form.to_dict()
+    fichier = request.files['imageArtiste']
+
+    byte = None
+    if fichier:
+        byte = fichier.read()
+
+    nomArtiste = data['nomArtiste'] if 'nomArtiste' in data.keys() else None
+    nomGroupe = data['nomGroupe'] if 'nomGroupe' in data.keys() else None
+    styleArtiste = data['styleArtiste'] if 'styleArtiste' in data.keys() else None
+    urlInstaArtiste = data['urlInstaArtiste'] if 'urlInstaArtiste' in data.keys() else None
+    urlYoutubeArtiste = data['urlYoutubeArtiste'] if 'urlYoutubeArtiste' in data.keys() else None
+
+    if nomGroupe is None:
+        nomGroupe = Groupe.ajouter_nouveau_groupe(nomGroupe=nomArtiste, imageGroupe=None).nomGroupe
+        print(nomGroupe)
+
+    if Artiste.ajouter_un_artiste(nomArtiste=nomArtiste, nomGroupe=nomGroupe,styleArtiste=styleArtiste,urlInstaArtiste=urlInstaArtiste,urlYoutubeArtiste=urlYoutubeArtiste, imageArtiste=byte):
+        return jsonify({'success': True})
+
+    return jsonify({'success': False, 'message': "L'artiste est déjà dans la base de données"})
+
+@app.route("/ajouter_nouveau_groupe", methods=['POST'])
+def ajouter_nouveau_groupe():
+    data = request.form.to_dict()
+    fichier = request.files['imageGroupe']
+
+    byte = None
+    if fichier:
+        byte = fichier.read()
+
+    if Groupe.ajouter_nouveau_groupe(nomGroupe=data['nomGroupe'], imageGroupe=byte) is not None:
+        return jsonify({'success': True})
+
+    return jsonify({'success': False, 'message': "Le groupe est déjà dans la base de données"})

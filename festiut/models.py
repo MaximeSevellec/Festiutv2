@@ -35,6 +35,14 @@ class Groupe(db.Model):
     nomGroupe = db.Column(db.String(25), primary_key=True, nullable=False)
     imageGroupe = db.Column(db.LargeBinary(length=(2**32)-1), nullable=True)
 
+    def ajouter_nouveau_groupe(nomGroupe, imageGroupe):
+        if Groupe.query.get(nomGroupe) is not None:
+            return Groupe.query.get(nomGroupe)
+        groupe = Groupe(nomGroupe=nomGroupe, imageGroupe=imageGroupe)
+        db.session.add(groupe)
+        db.session.commit()
+        return groupe
+
 class Artiste(db.Model):
     nomArtiste = db.Column(db.String(25), primary_key=True, nullable=False)
     nomGroupe = db.Column(db.String(25), db.ForeignKey('groupe.nomGroupe'), nullable=False)
@@ -42,6 +50,16 @@ class Artiste(db.Model):
     urlInstaArtiste = db.Column(db.String(25), nullable=False)
     urlYoutubeArtiste = db.Column(db.String(25), nullable=False)
     imageArtiste = db.Column(db.LargeBinary(length=(2**32)-1), nullable=True)
+
+    def ajouter_un_artiste(nomArtiste, nomGroupe, styleArtiste, urlInstaArtiste, urlYoutubeArtiste, imageArtiste):
+        try:
+            artiste = Artiste(nomArtiste=nomArtiste, nomGroupe=nomGroupe, styleArtiste=styleArtiste, urlInstaArtiste=urlInstaArtiste, urlYoutubeArtiste=urlYoutubeArtiste, imageArtiste=imageArtiste)
+            db.session.add(artiste)
+            db.session.commit()
+            return True
+        except Exception as e:
+            print(e)
+            return False
 
 class Reserver(db.Model):
     idEvent = db.Column(db.Integer, db.ForeignKey('event.idEvent'), primary_key=True, nullable=False)
