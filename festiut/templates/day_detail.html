@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block styles %}
+    {{ super() }}
+{% endblock %}
+
+{% block main %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/festival.css')}}">
+
+    <p>{{ festival.nomFestival }}</p>
+
+    <h1>Événements du festival pour le {{ day }}</h1>
+
+    {% for event in events_for_day %}
+        <div class="event">
+            <a class="evt" href="#">
+                <p>{{ event.nomEvent }}</p>
+                <p>{{ event.typeEvent }}</p>
+                <p>{{ event.dateHeureDebutEvent | datetime }}</p>
+                <p>{{ event.dateHeureFinEvent | datetime }}</p>
+                <p>{{ event.estGratuit }}</p>
+                <p>{{ event.adresseEvent }}</p>
+                <p>{{ event.nbPlaceEvent }}</p>
+                <p>{{ event.imageEvent }}</p>
+            </a>
+        </div>
+    {% endfor %}
+{% endblock %}

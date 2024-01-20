@@ -82,7 +82,14 @@ def festival(idFestival):
     events = Event.query.filter(Event.idFestival == idFestival).order_by(Event.dateHeureDebutEvent).all()
     groupes = Groupe.query.select_from(Event).filter(Event.idFestival == idFestival).all()
     modifiable = Billet.query.filter(Billet.idFestival == festival.idFestival).first()
-    return render_template("festival.html", festival=festival, events=events, groupes=groupes, modifiable=modifiable)
+
+    events_by_day = {}
+    for event in events:
+        day = event.dateHeureDebutEvent.date()
+        if day not in events_by_day:
+            events_by_day[day] = []
+        events_by_day[day].append(event)
+    return render_template("festival.html", festival=festival, events=events, groupes=groupes, modifiable=modifiable, events_by_day=events_by_day)
 
 @app.route("/groupe/<string:nomGroupe>/")
 def groupe(nomGroupe):
@@ -94,6 +101,35 @@ def groupe(nomGroupe):
 def artiste(nomArtiste):
     artiste = Artiste.query.get(nomArtiste)
     return render_template("artiste.html", artiste=artiste)
+
+app.route("/programme/<int:idFestival>/<dateHeureDebutEvent>/")
+def programme(idFestival, dateHeureDebutEvent):
+        events = Event.query.filter(Event.idFestival == idFestival, Event.dateHeureDebutEvent == dateHeureDebutEvent, Event.dateHeureDebutEvent < dateHeureDebutEvent + timedelta(days=1)).order_by(Event.dateHeureDebutEvent).all()
+        return render_template("programme.html", events=events)
+    
+@app.route('/festival/<int:festival_id>/day/<string:day>')
+def day_detail(festival_id, day):
+    festival = Festival.query.get_or_404(festival_id)
+
+    day_date = datetime.strptime(day, '%Y-%m-%d')
+
+    events = Event.query.filter_by(idFestival=festival_id).order_by(Event.dateHeureDebutEvent).all()
+
+    events_for_day = [event for event in events if event.dateHeureDebutEvent.date() == day_date.date()]
+
+    return render_template('day_detail.html', festival=festival, day=day, events_for_day=events_for_day)
+
+
+
+@app.route('/festival/<int:festival_id>/location/<string:location>')
+def location_detail(festival_id, location):
+    festival = Festival.query.get_or_404(festival_id)
+    
+    events = Event.query.filter_by(idFestival=festival_id).order_by(Event.adresseEvent).all()
+
+    events_for_location = [event for event in events if event.adresseEvent == location]
+
+    return render_template('location_detail.html', festival=festival, location=location, events_for_location=events_for_location)
 
 @app.route("/login/", methods =("GET","POST" ,))
 def login():
