@@ -6,10 +6,24 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/festival.css')}}">
 
 <p>Festival numéro°{{ festival.idFestival }}</p>
-<p>{{ festival.nomFestival }}</p>
-<p>{{ festival.villeFestival }} {{ festival.codePostalFestival }}</p>
-<p>Du {{ festival.debutFest | datetime }}</p>
-<p>Jusqu'au {{ festival.finFest | datetime }}</p>
+{% if current_user.is_authenticated and current_user.role == 'Admin' and modifiable is none %}
+    <form>
+        <input type="text" name="nomFestival" value="{{ festival.nomFestival }}"></br>
+        <input type="text" name="villeFestival" value="{{ festival.villeFestival }}">
+        <input type="text" name="codePostalFestival" value="{{ festival.codePostalFestival }}"></br>
+        <input type="date" name="debutFest" value="{{ festival.debutFest }}"></br>
+        <input type="date" name="finFest" value="{{ festival.finFest }}"></br>
+        <button type="submit"> Enregistrer les modifications </button>
+    </form>
+{% else %}
+    <p>{{ festival.nomFestival }}</p>
+    <p>{{ festival.villeFestival }} {{ festival.codePostalFestival }}</p>
+    <p>Du {{ festival.debutFest | datetime }}</p>
+    <p>Jusqu'au {{ festival.finFest | datetime }}</p>
+    {% if current_user.is_authenticated and current_user.role == 'Admin' %}
+        <button type="none"> Modification impossibles, le festival possède déjà des billets achetés </button>
+    {% endif %}
+{% endif %}
 {{ festival.imageFestival | byte_to_image | safe }}
 
 <h1>Programmes du festival</h1>

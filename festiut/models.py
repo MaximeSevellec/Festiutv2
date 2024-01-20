@@ -2,9 +2,9 @@ from .app import db, login_manager
 from flask_login import UserMixin
 
 class Utilisateur(db.Model, UserMixin):
-    nom = db.Column(db.String(25), primary_key=True, nullable=False)
+    nom = db.Column(db.String(25), primary_key=True, default="Utilisateur")
     password = db.Column(db.String(80), nullable=False)
-    monRole = db.Column(db.String(25), nullable=False)
+    role = db.Column(db.String(25), nullable=False)
     
     def get_id(self):
         return self.nom

@@ -13,8 +13,8 @@ def loaddb():
     # Insertion des utilisateurs
     print("Inserting users...")
     db.session.add_all([
-        Utilisateur(nom="adm", password="86f65e28a754e1a71b2df9403615a6c436c32c42a75a10d02813961b86f1e428", monRole="Admin"),
-        Utilisateur(nom="user", password="04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb", monRole="Utilisateur")
+        Utilisateur(nom="adm", password="86f65e28a754e1a71b2df9403615a6c436c32c42a75a10d02813961b86f1e428", role="Admin"),
+        Utilisateur(nom="user", password="04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb", role="Utilisateur")
     ])
     db.session.commit()
 

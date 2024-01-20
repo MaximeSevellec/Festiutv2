@@ -81,7 +81,8 @@ def festival(idFestival):
     festival = Festival.query.get(idFestival)
     events = Event.query.filter(Event.idFestival == idFestival).order_by(Event.dateHeureDebutEvent).all()
     groupes = Groupe.query.select_from(Event).filter(Event.idFestival == idFestival).all()
-    return render_template("festival.html", festival=festival, events=events, groupes=groupes)
+    modifiable = Billet.query.filter(Billet.idFestival == festival.idFestival).first()
+    return render_template("festival.html", festival=festival, events=events, groupes=groupes, modifiable=modifiable)
 
 @app.route("/groupe/<string:nomGroupe>/")
 def groupe(nomGroupe):
