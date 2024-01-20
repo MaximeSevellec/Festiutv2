@@ -88,7 +88,7 @@ def festival(idFestival):
         if day not in events_by_day:
             events_by_day[day] = []
         events_by_day[day].append(event)
-    return render_template("festival.html", festival=festival, events=events, groupes=groupes, modifiable=modifiable, events_by_day=events_by_day)
+    return render_template("festival.html", festival=festival, events=events, groupes=groupes, events_by_day=events_by_day)
 
 @app.route("/groupe/<string:nomGroupe>/")
 def groupe(nomGroupe):
