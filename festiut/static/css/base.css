@@ -24,3 +24,11 @@
     width: 5%;
     aspect-ratio: 1/1;
 }
+
+footer{
+    text-align: center;
+    padding: 1em;
+    background-color: #f4f4f4;
+    box-shadow: 0 0.2em 0.4em rgba(0, 0, 0, 0.3);
+    border-radius: 0.4em;
+}

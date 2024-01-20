@@ -2,14 +2,46 @@
 {% block styles %}
     {{ super() }}
 {% endblock %}
+{% block scripts %}
+<script>
+    document.querySelectorAll('.day-link').forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            event.preventDefault(); 
+            
+            var newDay = link.textContent.trim();
+            
+            document.querySelector('h1').textContent = 'Événements du festival pour le ' + newDay;
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', link.href, true);
+
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 400) {
+                    document.querySelector('.events-container').innerHTML = xhr.responseText;
+                }
+            };
+
+            xhr.send();
+        });
+    });
+</script>
+{% endblock %}
 
 {% block main %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/festival.css')}}">
 
-    <p>{{ festival.nomFestival }}</p>
+    <h1>{{ festival.nomFestival }}</h1>
 
-    <h1>Événements du festival pour le {{ day }}</h1>
+    <h2>Événements du festival pour le {{ day }}</h2>
 
+    <div class="days-container">
+        {% for event_day in events_by_day %}
+            {% if event_day != day %}
+                <a href="{{ url_for('day_detail', festival_id=festival.idFestival, day=event_day.strftime('%Y-%m-%d')) }}" class="day-link">{{ event_day.strftime('%Y-%m-%d') }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+    
     {% for event in events_for_day %}
         <div class="event">
             <a class="evt" href="#">

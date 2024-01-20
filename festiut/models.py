@@ -28,6 +28,7 @@ class Event(db.Model):
     estGratuit = db.Column(db.Boolean, nullable=False)
     adresseEvent = db.Column(db.String(25), nullable=False)
     nbPlaceEvent = db.Column(db.Integer, nullable=False)
+    nom_groupe = db.Column(db.String(25), db.ForeignKey('groupe.nomGroupe'), nullable=True)
     imageEvent = db.Column(db.LargeBinary(length=(2**32)-1), nullable=True)
 
 class Groupe(db.Model):

@@ -1,0 +1,68 @@
+/* festival.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+button {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #e0e0e0;
+}
+
+.event {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.event a {
+    text-decoration: none;
+    color: #333;
+}
+
+.event a:hover {
+    color: #007bff;
+}
+
+a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.day-link {
+    display: flex;
+    padding: 10px;
+    margin: 10px 5px; /* Ajout du padding entre les day links */
+    background-color: #000000;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.day-link:hover {
+    background-color: #333333;
+}
+
+.days-container {
+    display: flex;
+}
+

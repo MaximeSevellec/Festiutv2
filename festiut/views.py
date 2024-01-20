@@ -116,8 +116,37 @@ def day_detail(festival_id, day):
 
     events_for_day = [event for event in events if event.dateHeureDebutEvent.date() == day_date.date()]
 
-    return render_template('day_detail.html', festival=festival, day=day, events_for_day=events_for_day)
+    
+    events_by_day = {}
+    for event in events:
+        event_day = event.dateHeureDebutEvent.date()
+        if event_day not in events_by_day:
+            events_by_day[event_day] = []
+        events_by_day[event_day].append(event)
 
+    return render_template('day_detail.html', festival=festival, day=day, events_by_day=events_by_day, events_for_day=events_for_day)
+
+from flask import request
+
+@app.route('/festival/<int:festival_id>/day/<string:day>/filter_by_location')
+def filter_by_location(festival_id, day):
+    festival = Festival.query.get_or_404(festival_id)
+    day_date = datetime.strptime(day, '%Y-%m-%d')
+    selected_location = request.args.get('location', default='', type=str)
+
+    events = Event.query.filter_by(idFestival=festival_id).order_by(Event.dateHeureDebutEvent).all()
+
+    if selected_location:
+        events = [event for event in events if event.adresseEvent == selected_location]
+
+    events_by_day = {}
+    for event in events:
+        event_day = event.dateHeureDebutEvent.date()
+        if event_day not in events_by_day:
+            events_by_day[event_day] = []
+        events_by_day[event_day].append(event)
+
+    return render_template('event_list.html', festival=festival, day=day, events_by_day=events_by_day)
 
 
 @app.route('/festival/<int:festival_id>/location/<string:location>')
