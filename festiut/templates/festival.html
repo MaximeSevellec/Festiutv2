@@ -1,34 +1,38 @@
 {% extends 'base.html' %}
 {% block styles %}
-{{ super() }}
+    {{ super() }}
 {% endblock %}
+
 {% block main %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/festival.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/festival.css')}}">
 
-<p>Festival numéro°{{ festival.idFestival }}</p>
-<p>{{ festival.nomFestival }}</p>
-<p>{{ festival.villeFestival }} {{ festival.codePostalFestival }}</p>
-<p>Du {{ festival.debutFest | datetime }}</p>
-<p>Jusqu'au {{ festival.finFest | datetime }}</p>
-{{ festival.imageFestival | byte_to_image | safe }}
+    <p>Festival numéro°{{ festival.idFestival }}</p>
+    <p>{{ festival.nomFestival }}</p>
+    <p>{{ festival.villeFestival }} {{ festival.codePostalFestival }}</p>
+    <p>Du {{ festival.debutFest | datetime }}</p>
+    <p>Jusqu'au {{ festival.finFest | datetime }}</p>
+    {{ festival.imageFestival | byte_to_image | safe }}
 
-<h1>Programmes du festival</h1>
+    <h1>Programmes du festival</h1>
 
-{% for event in events %}
-    <div class="event">
-        <a class="evt" href="#">
-            <p>{{ event.nomEvent }}</p>
-            <p>{{ event.typeEvent }}</p>
-            <p>{{ event.dateHeureDebutEvent | datetime }}</p>
-            <p>{{ event.dateHeureFinEvent | datetime }}</p>
-            <p>{{ event.estGratuit }}</p>
-            <p>{{ event.adresseEvent }}</p>
-            <p>{{ event.nbPlaceEvent }}</p>
-            <p>{{ event.imageEvent }}</p>
-        </a>
-    </div>
-{% endfor %}
+    {% for day, events_per_day in events_by_day.items() %}
+        <h2>{{ day }}</h2>
+    
+        {% for event in events_per_day %}
+            <div class="event">
+                <a class="evt" href="#">
+                    <p>{{ event.nomEvent }}</p>
+                    <p>{{ event.typeEvent }}</p>
+                    <p>{{ event.dateHeureDebutEvent | datetime }}</p>
+                    <p>{{ event.dateHeureFinEvent | datetime }}</p>
+                    <p>{{ event.estGratuit }}</p>
+                    <p>{{ event.adresseEvent }}</p>
+                    <p>{{ event.nbPlaceEvent }}</p>
+                    <p>{{ event.imageEvent }}</p>
+                </a>
+            </div>
+        {% endfor %}
+    {% endfor %}
 
-<h1>Groupes présents au festival</h1>
-
+    <h1>Groupes présents au festival</h1>
 {% endblock %}

@@ -6,7 +6,7 @@ from hashlib import sha256
 from flask_login import login_user, current_user, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from sqlalchemy.sql.expression import func
 import locale
 import base64
@@ -81,7 +81,14 @@ def festival(idFestival):
     festival = Festival.query.get(idFestival)
     events = Event.query.filter(Event.idFestival == idFestival).order_by(Event.dateHeureDebutEvent).all()
     groupes = Groupe.query.select_from(Event).filter(Event.idFestival == idFestival).all()
-    return render_template("festival.html", festival=festival, events=events, groupes=groupes)
+
+    events_by_day = {}
+    for event in events:
+        day = event.dateHeureDebutEvent.date()
+        if day not in events_by_day:
+            events_by_day[day] = []
+        events_by_day[day].append(event)
+    return render_template("festival.html", festival=festival, events=events, groupes=groupes, events_by_day=events_by_day)
 
 @app.route("/groupe/<string:nomGroupe>/")
 def groupe(nomGroupe):
@@ -93,6 +100,11 @@ def groupe(nomGroupe):
 def artiste(nomArtiste):
     artiste = Artiste.query.get(nomArtiste)
     return render_template("artiste.html", artiste=artiste)
+
+app.route("/programme_jour/<int:idFestival>/<dateHeureDebutEvent>/")
+def programme_jour(idFestival, dateHeureDebutEvent):
+    events = Event.query.filter(Event.idFestival == idFestival, Event.dateHeureDebutEvent == dateHeureDebutEvent, Event.dateHeureDebutEvent < dateHeureDebutEvent + timedelta(days=1)).order_by(Event.dateHeureDebutEvent).all()
+    return render_template("programme_jour.html", events=events)
 
 @app.route("/login/", methods =("GET","POST" ,))
 def login():
