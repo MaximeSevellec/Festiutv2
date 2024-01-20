@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block styles %}
+{{ super() }}
+{% endblock %}
+{% block main %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/artiste.css')}}">
+
+<p>{{ artiste.nomArtiste }}</p>
+<a href="{{ url_for('groupe', nomGroupe=artiste.nomGroupe) }}">
+    <p>{{ artiste.nomGroupe }}</p>
+</a>
+<p>{{ artiste.styleArtiste }}</p>
+<p>{{ artiste.urlInstaArtiste }}</p>
+<p>{{ artiste.urlYoutubeArtiste }}</p>
+{{ artiste.imageArtiste | byte_to_image | safe }}
+
+{% endblock %}

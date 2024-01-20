@@ -83,6 +83,17 @@ def festival(idFestival):
     groupes = Groupe.query.select_from(Event).filter(Event.idFestival == idFestival).all()
     return render_template("festival.html", festival=festival, events=events, groupes=groupes)
 
+@app.route("/groupe/<string:nomGroupe>/")
+def groupe(nomGroupe):
+    groupe = Groupe.query.get(nomGroupe)
+    artistes = Artiste.query.select_from(Groupe).filter(Groupe.nomGroupe == nomGroupe).all()
+    return render_template("groupe.html", groupe=groupe, artistes=artistes)
+
+@app.route("/event/<string:nomArtiste>/")
+def artiste(nomArtiste):
+    artiste = Artiste.query.get(nomArtiste)
+    return render_template("artiste.html", artiste=artiste)
+
 @app.route("/login/", methods =("GET","POST" ,))
 def login():
     f = LoginForm ()

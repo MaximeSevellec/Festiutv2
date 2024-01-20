@@ -27,7 +27,7 @@
 <div id="groupes">
     {% for groupe in groupes %}
         <div class="groupe">
-            <a class="grp" href="#">
+            <a class="grp" href="{{ url_for('groupe', nomGroupe=groupe.nomGroupe) }}">
                 {{ groupe.imageGroupe | byte_to_image | safe }}
                 <p>{{ groupe.nomGroupe }}</p>
                 + de détails
