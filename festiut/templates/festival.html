@@ -17,15 +17,14 @@
 {% for event in events %}
     <div class="event">
         <a class="evt" href="#">
-            nomEvent = db.Column(db.String(25), nullable=False)
-            typeEvent = db.Column(db.String(25), nullable=False)
-            dateEvent = db.Column(db.Date, nullable=False)
-            dateHeureDebutEvent = db.Column(db.Time, nullable=False)
-            dateHeureFinEvent = db.Column(db.Time, nullable=False)
-            estGratuit = db.Column(db.Boolean, nullable=False)
-            adresseEvent = db.Column(db.String(25), nullable=False)
-            nbPlaceEvent = db.Column(db.Integer, nullable=False)
-            imageEvent = db.Column(db.LargeBinary(length=(2**32)-1), nullable=True)
+            <p>{{ event.nomEvent }}</p>
+            <p>{{ event.typeEvent }}</p>
+            <p>{{ event.dateHeureDebutEvent | datetime }}</p>
+            <p>{{ event.dateHeureFinEvent | datetime }}</p>
+            <p>{{ event.estGratuit }}</p>
+            <p>{{ event.adresseEvent }}</p>
+            <p>{{ event.nbPlaceEvent }}</p>
+            <p>{{ event.imageEvent }}</p>
         </a>
     </div>
 {% endfor %}

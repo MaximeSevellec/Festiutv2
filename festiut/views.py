@@ -79,7 +79,7 @@ def home():
 @app.route("/festival/<int:idFestival>/")
 def festival(idFestival):
     festival = Festival.query.get(idFestival)
-    events = Event.query.filter(Event.idFestival == idFestival).order_by(Event.heureDebutEvent).all()
+    events = Event.query.filter(Event.idFestival == idFestival).order_by(Event.dateHeureDebutEvent).all()
     groupes = Groupe.query.select_from(Event).filter(Event.idFestival == idFestival).all()
     return render_template("festival.html", festival=festival, events=events, groupes=groupes)
 
