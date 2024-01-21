@@ -42,6 +42,14 @@ class Event(db.Model):
     nom_groupe = db.Column(db.String(25), db.ForeignKey('groupe.nomGroupe'), nullable=True)
     imageEvent = db.Column(db.LargeBinary(length=(2**32)-1), nullable=True)
 
+    def ajouter_nouveau_event(idFestival, nomEvent, typeEvent, dateHeureDebutEvent, dateHeureFinEvent, estGratuit, adresseEvent, nbPlaceEvent, nom_groupe, imageEvent):
+        if Event.query.filter(Event.idFestival == idFestival and Event.nomEvent == nomEvent).first() is not None:
+            return None
+        event = Event(idFestival=idFestival, nomEvent=nomEvent, typeEvent=typeEvent, dateHeureDebutEvent=dateHeureDebutEvent, dateHeureFinEvent=dateHeureFinEvent, estGratuit=estGratuit, adresseEvent=adresseEvent, nbPlaceEvent=nbPlaceEvent, nom_groupe=nom_groupe, imageEvent=imageEvent)
+        db.session.add(event)
+        db.session.commit()
+        return event
+
 class Groupe(db.Model):
     nomGroupe = db.Column(db.String(25), primary_key=True, nullable=False)
     imageGroupe = db.Column(db.LargeBinary(length=(2**32)-1), nullable=True)
@@ -108,7 +116,17 @@ class Logement(db.Model):
     prixLogement = db.Column(db.Float, nullable=False)
     dateDebutLogement = db.Column(db.DateTime, nullable=False)
     dateFinLogement = db.Column(db.DateTime, nullable=False)
-    imageLogement = db.Column(db.LargeBinary(length=(2**32)-1), nullable=True)
+    adresseLogement = db.Column(db.String(25), nullable=False)
+
+    def ajouter_nouveau_logement(idFestival, nomGroupe, nomLogement, typeLogement, nbPlaceLogement, prixLogement, dateDebutLogement, dateFinLogement):
+        try:
+            logement = Logement(idFestival=idFestival, nomGroupe=nomGroupe, nomLogement=nomLogement, typeLogement=typeLogement, nbPlaceLogement=nbPlaceLogement, prixLogement=prixLogement, dateDebutLogement=dateDebutLogement, dateFinLogement=dateFinLogement)
+            db.session.add(logement)
+            db.session.commit()
+            return True
+        except Exception as e:
+            print(e)
+            return False
 
 @login_manager.user_loader
 def load_user(nom):
