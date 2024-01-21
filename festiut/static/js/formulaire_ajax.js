@@ -1,21 +1,21 @@
 function envoyerFormulaireGroupe() {
     if ($('#formulaire-groupe')[0].checkValidity()) {
         var formData = new FormData($('#formulaire-groupe')[0]);
-        
+
         $.ajax({
             type: 'POST',
             url: '/ajouter_nouveau_groupe',
             data: formData,
             contentType: false,
             processData: false,
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     window.location.reload(true);
                 } else {
                     $('#message-groupe').text(response.message);
                 }
             },
-            error: function(error) {
+            error: function (error) {
                 console.log(error);
             }
         });
@@ -32,14 +32,14 @@ function envoyerFormulaireArtiste() {
             data: formData,
             contentType: false,
             processData: false,
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     window.location.reload(true);
                 } else {
                     $('#message-artiste').text(response.message);
                 }
             },
-            error: function(error) {
+            error: function (error) {
                 console.log(error);
             }
         });
@@ -56,14 +56,14 @@ function envoyerFormulaireFestival() {
             data: formData,
             contentType: false,
             processData: false,
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     window.location.reload(true);
                 } else {
                     $('#message-festival').text(response.message);
                 }
             },
-            error: function(error) {
+            error: function (error) {
                 console.log(error);
             }
         });
@@ -80,14 +80,39 @@ function envoyerFormulaireEvent() {
             data: formData,
             contentType: false,
             processData: false,
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     window.location.reload(true);
                 } else {
                     $('#message-event').text(response.message);
                 }
             },
-            error: function(error) {
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+}
+
+function envoyerFormulaireAssignerGroupe(button) {
+    if ($('#formulaire-assigner-groupe')[0].checkValidity()) {
+        idEvent = $(button).attr('data-idEvent');
+        var formData = new FormData($('#formulaire-assigner-groupe')[0]);
+
+        $.ajax({
+            type: 'POST',
+            url: '/assigner_nouveau_groupe_event/' + idEvent,
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.success) {
+                    window.location.href = "/assigner_groupe_event_sans_groupe/";
+                } else {
+                    $('#message-assigner-groupe').text(response.message);
+                }
+            },
+            error: function (error) {
                 console.log(error);
             }
         });
