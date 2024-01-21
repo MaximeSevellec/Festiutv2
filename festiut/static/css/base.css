@@ -18,18 +18,18 @@
 #navbar {
     display: flex;
     justify-content: space-between;
-    
 }
 
 .left {
     flex-grow: 1;
     display: flex;
     margin-right: 20%;
+    margin-left: 3%;
 }
 
 .logo, .lien {
+    margin: 2%;
     font-size: 130%;
-    margin-bottom: 1%;
     text-decoration: none;
     color: black;
     transition: transform 0.3s, text-decoration 0.3s, text-underline-offset 0.3s;
@@ -108,4 +108,26 @@ footer>p{
 
 .error{
     color: red;
+}
+
+.menuDeroulant {
+    padding: 1%;
+    position: relative;
+    margin-bottom:0% ;
+    font-size: 100%;
+    border: 0.2em solid #ccc;
+    border-radius: 2%;
+    cursor: pointer;
+    margin-left: 2%;
+}
+
+/* Style des options dans le menu déroulant */
+option {
+    background-color: #fff;
+    color: #333;
+}
+
+/* Style lorsque le menu déroulant est survolé */
+select:hover {
+    border-color: #666;
 }
