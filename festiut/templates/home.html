@@ -16,7 +16,7 @@
                 <p>Jusqu'au {{ festival.finFest | datetime }}</p>
                 {{ festival.imageFestival | byte_to_image | safe }}
                 + de détails
-                <a class="acheterBillet" href="#billet">
+                <a class="acheterBillet" href="{{ url_for('billeterie', idFestival=festival.idFestival) }}">
                     Acheter un billet
                 </a>
             </a> 

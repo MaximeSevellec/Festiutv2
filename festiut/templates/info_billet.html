@@ -3,48 +3,76 @@
     {{ super() }}
 {% endblock %}
 {% block main %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <form action="" method="POST">
         <section class="Acheter_billet">
             <h1>Acheter un billet</h1>
-            {% if nomBillet == 'Journée' %}
-                <p>Vous avez choisi un billet journée</p>
-                <p>Voici les journées disponibles : </p>
-                <select id="jourSelect" name="selectedDay">
-                    {% for jour in jours_dispo %}
-                        <option value="{{ jour }}" data-jour="{{ jour }}">{{ jour  | datetime_format}}</option>
-                    {% endfor %}
-                </select>
-                <div id="evenementsList"></div>
-            {% elif nomBillet == '2 jours' %}
-                <p>Vous avez choisi un billet 2 jours</p>
-                <p>Voici les journées disponibles : </p>
-                <select id="jourSelect" name="selectedDay">
-                    {% for jour in combinaisons_successives_affcihe %}
-                        <option value="{{ jour }}" data-jour="{{ jour }}">{{ jour }}</option>
-                    {% endfor %}
-                </select>
-                <div id="evenementsList"></div>
-            {% endif %}
-            {% if nomBillet == 'Totalité du festival' %}
-                <p>Vous avez choisi un billet totalité du festival</p>
-                <p>Voici les évènements disponibles : </p>
-                {% for event in evenements_disponibles %}
-                    <div class="event">
-                        <a class="evt" href="#">
-                            <p>{{ event.nomEvent }}</p>
-                            <p>{{ event.typeEvent }}</p>
-                            <p>{{ event.dateHeureDebutEvent | datetime_format }} - {{ event.dateHeureFinEvent | datetime_format('%Hh:%M') }}</p>
-                            <p>{{ event.adresseEvent }}</p>
-                            <p>{{ event.nbPlaceEvent }}</p>
-                        </a>
-                    </div>
+            <p>Pour quel festival voulez-vous aller ?</p>
+            <p id="nomBillet" hidden>{{ nomBillet }}</p>
+            <select name="nomFestival" id="nomFestival" required>
+                <option value="" disabled selected hidden>Choisissez un Festival</option>
+                {% for f in festivals %}
+                    {% if festival.idFestival == f.idFestival %}
+                        <option value="{{ festival.idFestival }}" selected>{{ f.nomFestival }}</option>
+                    {% else %}
+                        <option value="{{ festival.idFestival }}">{{ f.nomFestival }}</option>
+                    {% endif %}
                 {% endfor %}
-            {% endif %} 
-            <label for="prix">Prix du billet : </label>
+            </select>
+            <div>
+                <select id="test">
+
+                </select>
+            </div>
+            <label for="prix">Prix du billet : </label> </br><!-- Ajouter le prix ici -->
             <label for="quantite">Quantité : </label>
             <input type="number" name="quantite" id="quantite" value="1" min="1"  max="3" required>
         </section>
         <input class="valider" type="submit" id="valider" name="valider" value="Acheter le billet"/>
     </form>
-    
+    <script>
+        var nomFest = document.getElementById("nomFestival");
+        var nomBillet = document.getElementById("nomBillet").textContent;
+        if (nomFest !== null) {
+            nomFest.addEventListener("change", function (event) {
+                var nomF = nomFest.options[nomFest.selectedIndex].text;
+                var formData = new FormData();
+                formData.append('nom_festival', nomF);
+                var test = document.getElementById("test");
+                $.ajax({
+                    type: 'POST',
+                    url: '/get_dates',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        var jours_disponibles_formates = response['jours_disponibles_formates'];
+                        var combinaisons_successives_affcihe = response['combinaisons_successives_affcihe'];
+                        test.innerHTML = "";
+                        if (nomBillet == "Journée") {
+                            for (var i = 0; i < jours_disponibles_formates.length; i++) {
+                                var option = document.createElement("option");
+                                option.value = jours_disponibles_formates[i];
+                                option.text = jours_disponibles_formates[i];
+                                test.appendChild(option);
+                            }
+                        } else if (nomBillet == "2 jours") {
+                            for (var i = 0; i < combinaisons_successives_affcihe.length; i++) {
+                                var option = document.createElement("option");
+                                option.value = combinaisons_successives_affcihe[i];
+                                option.text = combinaisons_successives_affcihe[i];
+                                test.appendChild(option);
+                            }
+                        } else if (nomBillet == "Totalité du festival") {
+                            return;
+                        }
+                        test.style.display = "block";
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        }
+    </script>
 {% endblock %}
