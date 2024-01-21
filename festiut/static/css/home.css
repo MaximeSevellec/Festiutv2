@@ -9,11 +9,18 @@
     text-underline-offset: 25%;
 }
 
+
+
 .festival{
     display: flex;
     padding: 2%;
     box-shadow: 0 0.2em 0.4em rgba(0, 0, 0, 0.3);
-    margin: 1%;
+    margin-bottom: 1%;
+}
+
+.festival>img{
+    max-width:100%;
+    height: auto;
 }
 
 .infoFestival{
