@@ -342,7 +342,7 @@ def ajouter_nouveau_event():
     if nomEvent is None or typeEvent is None or dateHeureDebutEvent is None or dateHeureFinEvent is None or adresseEvent is None or nbPlaceEvent is None:
         return jsonify({'success': False, 'message': "Le nom de l'évènement, le type, la date de début, la date de fin, l'adresse ou le nombre de place ne sont pas renseignés"})
 
-    if Event.ajouter_nouveau_event(idFestival=idFestival, nomEvent=nomEvent, typeEvent=typeEvent, dateHeureDebutEvent=dateHeureDebutEvent, dateHeureFinEvent=dateHeureFinEvent, estGratuit=estGratuit, adresseEvent=adresseEvent, nbPlaceEvent=nbPlaceEvent, nom_groupe=nom_groupe, imageEvent=byte) is not None:
+    if nom_groupe is not None and Event.ajouter_nouveau_event(idFestival=idFestival, nomEvent=nomEvent, typeEvent=typeEvent, dateHeureDebutEvent=dateHeureDebutEvent, dateHeureFinEvent=dateHeureFinEvent, estGratuit=estGratuit, adresseEvent=adresseEvent, nbPlaceEvent=nbPlaceEvent, nom_groupe=nom_groupe, imageEvent=byte) is not None:
 
         nomLogement = data['nomLogement'] if 'nomLogement' in data.keys() else None
         typeLogement = data['typeLogement'] if 'typeLogement' in data.keys() else None
@@ -352,14 +352,15 @@ def ajouter_nouveau_event():
         dateFinLogement = data['dateFinLogement'] if 'dateFinLogement' in data.keys() else None
         adresseLogement = data['adresseLogement'] if 'adresseLogement' in data.keys() else None
 
+        print(nomLogement, typeLogement, nbPlaceLogement, prixLogement, dateDebutLogement, dateFinLogement, adresseLogement)
+
         if nomLogement is not None and typeLogement is not None and nbPlaceLogement is not None and prixLogement is not None and dateDebutLogement is not None and dateFinLogement is not None and adresseLogement is not None:
-            if Logement.ajouter_nouveau_logement(nomLogement=nomLogement, typeLogement=typeLogement, nbPlaceLogement=nbPlaceLogement, prixLogement=prixLogement, dateDebutLogement=dateDebutLogement, dateFinLogement=dateFinLogement, adresseLogement=adresseLogement, idFestival=idFestival):
+            if Logement.ajouter_nouveau_logement(nomGroupe=nom_groupe, nomLogement=nomLogement, typeLogement=typeLogement, nbPlaceLogement=nbPlaceLogement, prixLogement=prixLogement, dateDebutLogement=dateDebutLogement, dateFinLogement=dateFinLogement, adresseLogement=adresseLogement, idFestival=idFestival):
                 return jsonify({'success': True})
             else:
                 return jsonify({'success': False, 'message': "Une erreur s'est produite lors de l'ajout du logement"})
-        return jsonify({'success': True})
 
-    return jsonify({'success': False, 'message': "L'évènement est déjà dans la base de données"})
+    return jsonify({'success': True})
 
 @app.route("/assigner_groupe_event_sans_groupe/")
 def assigner_groupe_event_sans_groupe():
