@@ -32,7 +32,9 @@
 
     <h1>{{ festival.nomFestival }}</h1>
 
-    <h2>Événements du festival pour le {{ day }}</h2>
+    <h2>Événements du festival pour le {{ day }} <a class="acheterBillet" href="{{ url_for('billeterie', idFestival=festival.idFestival) }}">
+        Acheter un billet
+    </a></h2>
 
     <div class="days-container">
         {% for event_day in events_by_day %}
@@ -41,6 +43,7 @@
             {% endif %}
         {% endfor %}
     </div>
+<<<<<<< HEAD
     <p class="info">Passez la souris sur les images pour plus d'informations</p>
     <div class="affichageDetail">
         {% for event in events_for_day %}
@@ -60,4 +63,24 @@
             </div>
         {% endfor %}
     </div>   
+=======
+    
+    {% for event in events_for_day %}
+    <div class="event">
+        <a class="evt" href="#">
+            <p>{{ event.nomEvent }}</p>
+            <p>{{ event.typeEvent }}</p>
+            <p>{{ event.dateHeureDebutEvent | datetime_format }} - {{ event.dateHeureFinEvent | datetime_format('%Hh:%M') }}</p>
+            {% if event.estGratuit %}
+                <p>{{ event.reservations }}</p>
+                <a href="{{ url_for('reserver', idEvent=event.idEvent) }}">Réserver</a>
+            {% endif %}
+            <p>{{ event.reservations|lenght }} / {{ event.nbPlaceEvent if event.nbPlaceEvent > 0 else "illimité" }}</p>
+            <p>{{ event.adresseEvent }}</p>
+            {{ event.imageEvent | byte_to_image | safe }}
+        </a>
+    </div>
+    
+    {% endfor %}
+>>>>>>> 104318d3fd38a5e00734edb8d1a6c2feb05fe8ab
 {% endblock %}

@@ -107,8 +107,8 @@ class Artiste(db.Model):
 class Reserver(db.Model):
     idEvent = db.Column(db.Integer, db.ForeignKey('event.idEvent'), primary_key=True, nullable=False)
     nomUtilisateur = db.Column(db.String(25), db.ForeignKey('utilisateur.nom'), primary_key=True, nullable=False)
-    dateReservation = db.Column(db.Date, nullable=False)
-    nbPlaceReserve = db.Column(db.Integer, nullable=False)
+    dateReservation = db.Column(db.Date, nullable=False, default=datetime.now())
+    nbPlaceReserve = db.Column(db.Integer, nullable=False, default=1)
 
     def reserver_event(idEvent, nomUtilisateur, dateReservation, nbPlaceReserve):
         try:
