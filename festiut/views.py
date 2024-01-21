@@ -254,11 +254,7 @@ def login():
         if user:
             login_user(user)
             flash ("Bon retour parmis nous " + user.nom, "success")
-            referrer = request.referrer
-            if referrer and request.host in referrer:
-                return redirect(referrer)
-            else:
-                return redirect(url_for('home'))
+            return redirect(url_for('home'))
     return render_template("login.html", form=f)
 
 @app.route("/register/", methods =("GET","POST" ,))
@@ -269,11 +265,7 @@ def register():
         if user:
             login_user(user)
             flash ("Bienvenue parmis nous " + user.nom, "success")
-            referrer = request.referrer
-            if referrer and request.host in referrer:
-                return redirect(referrer)
-            else:
-                return redirect(url_for('home'))
+            return redirect(url_for('home'))
     return render_template("register.html", form=f)
 
 @app.route("/logout/")

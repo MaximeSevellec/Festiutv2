@@ -110,7 +110,7 @@ class Reserver(db.Model):
     dateReservation = db.Column(db.Date, nullable=False, default=datetime.now())
     nbPlaceReserve = db.Column(db.Integer, nullable=False, default=1)
 
-    def reserver_event(idEvent, nomUtilisateur, dateReservation, nbPlaceReserve):
+    def reserver_event(idEvent, nomUtilisateur, dateReservation=datetime.now(), nbPlaceReserve=1):
         try:
             reserver = Reserver(idEvent=idEvent, nomUtilisateur=nomUtilisateur, dateReservation=dateReservation, nbPlaceReserve=nbPlaceReserve)
             db.session.add(reserver)

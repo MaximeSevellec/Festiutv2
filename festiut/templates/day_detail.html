@@ -51,7 +51,6 @@
             <p>{{ event.typeEvent }}</p>
             <p>{{ event.dateHeureDebutEvent | datetime_format }} - {{ event.dateHeureFinEvent | datetime_format('%Hh:%M') }}</p>
             {% if event.estGratuit %}
-                <p>{{ event.reservations }}</p>
                 <a href="{{ url_for('reserver', idEvent=event.idEvent) }}">Réserver</a>
             {% endif %}
             <p>{{ event.reservations|lenght }} / {{ event.nbPlaceEvent if event.nbPlaceEvent > 0 else "illimité" }}</p>
