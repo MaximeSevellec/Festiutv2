@@ -6,7 +6,7 @@
 #festivals>h1{
     padding-bottom: 1%;
     text-decoration:2px underline;
-    text-underline-offset: 20%;
+    text-underline-offset: 25%;
 }
 
 .festival{
@@ -58,6 +58,12 @@
     transform: scale(1.1);
     text-decoration: underline;
     text-underline-offset: 20%;
+}
+
+#groupes>h1{
+    padding-bottom: 1%;
+    text-decoration:2px underline;
+    text-underline-offset: 25%;
 }
 
 #groupes{
