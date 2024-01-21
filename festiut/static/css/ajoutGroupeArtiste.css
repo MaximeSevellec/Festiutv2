@@ -1,0 +1,55 @@
+.parent{
+    display: flex;
+    align-items: center;
+}
+
+.artiste{
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.artiste>h2{
+    text-align: center;
+}
+
+
+#formulaire-artiste {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input[type="text"], select, input[type="file"] {
+    width: 100%;
+    padding: 2%;
+    margin: 2% 0;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #ccc;
+    color: #333;
+    padding: 4%;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background-color: #ddd;
+}
+
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 4%;
+    cursor: pointer;
+    border: none;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.groupe>h2{
+    text-align: center;
+}
