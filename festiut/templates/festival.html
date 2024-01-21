@@ -18,4 +18,7 @@
     {% endfor %}
 
     <h1>Groupes présents au festival</h1>
+        {% for groupe in groupes %}
+            <h2><a href="{{ url_for('groupe', nomGroupe=groupe.nomGroupe) }}">{{ groupe.nomGroupe }}</a></h2>
+        {% endfor %}
 {% endblock %}

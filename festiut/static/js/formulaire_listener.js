@@ -1,3 +1,8 @@
+function deselectionnerOption() {
+    var selectElement = document.getElementById("selectionner-groupe");
+    selectElement.selectedIndex = 0;
+}
+
 var formulaireArtiste = document.getElementById("formulaire-artiste");
 if (formulaireArtiste !== null) {
     formulaireArtiste.addEventListener("submit", function(event) {
@@ -15,6 +20,13 @@ if (formulaireGroupe !== null) {
 var formulaireFestival = document.getElementById("formulaire-festival");
 if (formulaireFestival !== null) {
     formulaireFestival.addEventListener("submit", function(event) {
+        event.preventDefault();
+    });
+}
+
+var formulaireEvent = document.getElementById("formulaire-event");
+if (formulaireEvent !== null) {
+    formulaireEvent.addEventListener("submit", function(event) {
         event.preventDefault();
     });
 }

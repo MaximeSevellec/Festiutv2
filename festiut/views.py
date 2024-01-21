@@ -66,6 +66,12 @@ def home():
         if min_dateheure is None or max_dateheure is None:
             continue
 
+        if Event.query.filter(Event.idFestival == festival.idFestival).with_entities(Event.nom_groupe, func.min(Event.dateHeureDebutEvent)).first()[0] is None:
+            continue
+
+        if Event.query.filter(Event.idFestival == festival.idFestival).with_entities(Event.nom_groupe, func.max(Event.dateHeureDebutEvent)).first()[0] is None:
+            continue
+
         festival_temp = copy.copy(festival)
         festival_temp.debutFest = min_dateheure
         festival_temp.finFest = max_dateheure
@@ -302,3 +308,56 @@ def voir_festivals():
         return redirect(url_for("home"))
     festivals = Festival.query.order_by(Festival.debutFest).all()
     return render_template("voir_festivals.html", festivals=festivals)
+
+@app.route("/ajouter_evenement/")
+def ajouter_evenement():
+    if not current_user.is_authenticated or current_user.role != "Admin":
+        return redirect(url_for("home"))
+    festivals = Festival.query.order_by(Festival.debutFest).all()
+    groupes = Groupe.query.all()
+    return render_template("ajouter_evenement.html", festivals=festivals, groupes=groupes)
+
+@app.route("/ajouter_nouveau_event", methods=['POST'])
+def ajouter_nouveau_event():
+    data = request.form.to_dict()
+    fichier = request.files['imageEvent']
+
+    byte = None
+    if fichier:
+        byte = fichier.read()
+
+    nomFestival = data['nomFestival'] if 'nomFestival' in data.keys() else None
+    if(nomFestival is None):
+        return jsonify({'success': False, 'message': "Le nom du festival n'est pas renseigné"})
+    else:
+        idFestival = Festival.query.filter(Festival.nomFestival == nomFestival).first().idFestival
+    nomEvent = data['nomEvent'] if 'nomEvent' in data.keys() else None
+    typeEvent = data['typeEvent'] if 'typeEvent' in data.keys() else None
+    dateHeureDebutEvent = data['dateHeureDebutEvent'] if 'dateHeureDebutEvent' in data.keys() else None
+    dateHeureFinEvent = data['dateHeureFinEvent'] if 'dateHeureFinEvent' in data.keys() else None
+    estGratuit = data['estGratuit'] if 'estGratuit' in data.keys() else False
+    adresseEvent = data['adresseEvent'] if 'adresseEvent' in data.keys() else None
+    nbPlaceEvent = data['nbPlaceEvent'] if 'nbPlaceEvent' in data.keys() else None
+    nom_groupe = data['nom_groupe'] if 'nom_groupe' in data.keys() else None
+
+    if nomEvent is None or typeEvent is None or dateHeureDebutEvent is None or dateHeureFinEvent is None or adresseEvent is None or nbPlaceEvent is None:
+        return jsonify({'success': False, 'message': "Le nom de l'évènement, le type, la date de début, la date de fin, l'adresse ou le nombre de place ne sont pas renseignés"})
+
+    if Event.ajouter_nouveau_event(idFestival=idFestival, nomEvent=nomEvent, typeEvent=typeEvent, dateHeureDebutEvent=dateHeureDebutEvent, dateHeureFinEvent=dateHeureFinEvent, estGratuit=estGratuit, adresseEvent=adresseEvent, nbPlaceEvent=nbPlaceEvent, nom_groupe=nom_groupe, imageEvent=byte) is not None:
+
+        nomLogement = data['nomLogement'] if 'nomLogement' in data.keys() else None
+        typeLogement = data['typeLogement'] if 'typeLogement' in data.keys() else None
+        nbPlaceLogement = data['nbPlaceLogement'] if 'nbPlaceLogement' in data.keys() else None
+        prixLogement = data['prixLogement'] if 'prixLogement' in data.keys() else None
+        dateDebutLogement = data['dateDebutLogement'] if 'dateDebutLogement' in data.keys() else None
+        dateFinLogement = data['dateFinLogement'] if 'dateFinLogement' in data.keys() else None
+        adresseLogement = data['adresseLogement'] if 'adresseLogement' in data.keys() else None
+
+        if nomLogement is not None and typeLogement is not None and nbPlaceLogement is not None and prixLogement is not None and dateDebutLogement is not None and dateFinLogement is not None and adresseLogement is not None:
+            if Logement.ajouter_nouveau_logement(nomLogement=nomLogement, typeLogement=typeLogement, nbPlaceLogement=nbPlaceLogement, prixLogement=prixLogement, dateDebutLogement=dateDebutLogement, dateFinLogement=dateFinLogement, adresseLogement=adresseLogement, idFestival=idFestival):
+                return jsonify({'success': True})
+            else:
+                return jsonify({'success': False, 'message': "Une erreur s'est produite lors de l'ajout du logement"})
+        return jsonify({'success': True})
+
+    return jsonify({'success': False, 'message': "L'évènement est déjà dans la base de données"})

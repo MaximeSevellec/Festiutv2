@@ -69,3 +69,27 @@ function envoyerFormulaireFestival() {
         });
     }
 }
+
+function envoyerFormulaireEvent() {
+    if ($('#formulaire-event')[0].checkValidity()) {
+        var formData = new FormData($('#formulaire-event')[0]);
+
+        $.ajax({
+            type: 'POST',
+            url: '/ajouter_nouveau_event',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                if (response.success) {
+                    window.location.reload(true);
+                } else {
+                    $('#message-event').text(response.message);
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+}
