@@ -103,8 +103,7 @@ def billeterie():
 
 @app.route("/info_billet/<string:nomBillet>/")
 def info_billet(nomBillet):
-    festival = Festival.query.get(1)    
-    idFestival = festival.idFestival
+    festival = Festival.query.get(1)   
     if festival:
 
         debut_festival = festival.debutFest
@@ -361,3 +360,33 @@ def ajouter_nouveau_event():
         return jsonify({'success': True})
 
     return jsonify({'success': False, 'message': "L'évènement est déjà dans la base de données"})
+
+@app.route("/assigner_groupe_event_sans_groupe/")
+def assigner_groupe_event_sans_groupe():
+    if not current_user.is_authenticated or current_user.role != "Admin":
+        return redirect(url_for("home"))
+    events = Event.query.filter(Event.nom_groupe == None).all()
+    return render_template("assigner_groupe_event_sans_groupe.html", events=events)
+
+@app.route("/assigner_groupe/<int:idEvent>/")
+def assigner_groupe(idEvent):
+    if not current_user.is_authenticated or current_user.role != "Admin":
+        return redirect(url_for("home"))
+    event = Event.query.get(idEvent)
+    if event.nom_groupe is not None:
+        return redirect(url_for("home"))
+    groupes = Groupe.query.all()
+    return render_template("assigner_groupe.html", event=event, groupes=groupes)
+
+@app.route("/assigner_nouveau_groupe_event/<int:idEvent>", methods=['POST'])
+def assigner_nouveau_groupe_event(idEvent):
+    data = request.form.to_dict()
+    nomGroupe = data['nomGroupe'] if 'nomGroupe' in data.keys() else None
+
+    if idEvent is None or nomGroupe is None:
+        return jsonify({'success': False, 'message': "L'évènement n'est pas renseigné"})
+
+    event = Event.query.get(idEvent)
+    event.nom_groupe = nomGroupe
+    db.session.commit()
+    return jsonify({'success': True})

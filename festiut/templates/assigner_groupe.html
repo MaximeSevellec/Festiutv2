@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block styles %}
+    {{ super() }}
+{% endblock %}
+{% block main %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<h2>Assigner un groupe à cet évènement</h2>
+
+<p>{{ event.nomEvent }}</p>
+<p>{{ event.typeEvent }}</p>
+<p>{{ event.dateHeureDebutEvent }}</p>
+<p>{{ event.dateHeureFinEvent }}</p>
+<p>{{ event.estGratuit }}</p>
+<p>{{ event.adresseEvent }}</p>
+<p>{{ event.nbPlaceEvent }}</p>
+<p id="message-assigner-groupe"></p>
+<form id="formulaire-assigner-groupe" action="" enctype="multipart/form-data">
+
+    <select name="nomGroupe" id="selectionner-groupe" required>
+        <option value="" disabled selected hidden>Choisissez un groupe</option>
+        {% for groupe in groupes %}
+            <option value="{{ groupe.nomGroupe }}">{{ groupe.nomGroupe }}</option>
+        {% endfor %}
+    </select>
+
+    <p>Nom du logement</p>
+    <input type="text" name="nomLogement" id="nomLogement">
+    <p>Type de logement</p>
+    <input type="text" name="typeLogement" id="typeLogement">
+    <p>Nombre de places disponibles</p>
+    <input type="number" min="-1" name="nbPlaceLogement" id="nbPlaceLogement">
+    <p>Prix du logement</p>
+    <input type="number" min="-1" name="prixLogement" id="prixLogement">
+    <p>Date et heure de début du logement</p>
+    <input type="datetime-local" name="dateDebutLogement" id="dateDebutLogement">
+    <p>Date et heure de fin du logement</p>
+    <input type="datetime-local" name="dateFinLogement" id="dateFinLogement">
+    <p>Adresse du logement</p>
+    <input type="text" name="adresseLogement" id="adresseLogement">
+    
+    <button type="submit" data-idEvent="{{ event.idEvent }}" onclick="envoyerFormulaireAssignerGroupe(this)">Ajouter le groupe</button>
+
+</form>
+
+<p>{{ event.imageEvent }}</p>
+<script src="{{ url_for('static', filename='js/formulaire_listener.js') }}"></script>
+<script src="{{ url_for('static', filename='js/formulaire_ajax.js') }}"></script>
+{% endblock %}

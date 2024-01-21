@@ -28,6 +28,6 @@
 
     <button type="submit" onclick="envoyerFormulaireFestival()">Ajouter le festival</button>
 </form>
-<script src="../static/js/formulaire_listener.js"></script>
-<script src="../static/js/formulaire_ajax.js"></script>
+<script src="{{ url_for('static', filename='js/formulaire_listener.js') }}"></script>
+<script src="{{ url_for('static', filename='js/formulaire_ajax.js') }}"></script>
 {% endblock %}
