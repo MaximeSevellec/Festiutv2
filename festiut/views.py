@@ -1,3 +1,4 @@
+from itertools import combinations
 from markupsafe import Markup
 from .app import app, login_manager
 from flask import render_template,request, redirect, url_for, jsonify
@@ -111,7 +112,27 @@ def info_billet(nomBillet):
         jours_dispo = [debut_festival + timedelta(days=i) for i in range(duree_festival)]
         print(jours_dispo)
 
-    return render_template("info_billet.html",nomBillet=nomBillet, jours_dispo=jours_dispo )
+        import locale
+        locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+
+        jours_disponibles_formates = [date.strftime('%A %d %B %H:%M') for date in jours_dispo]
+
+        combinaisons_jours = list(combinations(jours_disponibles_formates, 2))
+        combinaisons_successives = [comb for comb in combinaisons_jours if jours_disponibles_formates.index(comb[0]) == jours_disponibles_formates.index(comb[1]) - 1]
+        combinaisons_successives_affcihe = [f"{comb[0]} - {comb[1]}" for comb in combinaisons_successives]
+
+        evenements_disponibles = Event.query.filter(Event.idFestival == festival.idFestival).all()
+
+    return render_template("info_billet.html",nomBillet=nomBillet, jours_dispo=jours_dispo, combinaisons_successives_affcihe=combinaisons_successives_affcihe, evenements_disponibles=evenements_disponibles )
+
+
+@app.route('/evenements_disponibles/<string:date>/', methods=['GET'])
+def evenements_disponibles(date):
+    event = Event.query.filter(Event.dateHeureDebutEvent == date).all()
+    evenements = []
+    for e in event:
+        evenements.append(e.nomEvent)
+    return jsonify({'evenements': evenements})
 
 @app.template_filter('datetime_format')
 def datetime_format(value, format='%A %d %B à %Hh%M'):

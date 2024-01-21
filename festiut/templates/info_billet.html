@@ -1,36 +1,50 @@
 {% extends 'base.html' %}
 {% block style %}
-{{ super() }}
+    {{ super() }}
 {% endblock %}
 {% block main %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/info_billet.css') }}">
     <form action="" method="POST">
-    <section class="Acheter_billet">
-        <h1>Acheter un billet</h1>
-        {% if nomBillet == 'Journée' %}
-        <p>Vous avez choisi un billet journée</p>
-        <p>Voici les journées disponibles : </p>
-        <select>
-            {% for jour in jours_dispo %}
-                <option value="{{ jour }}">{{ jour  | datetime_format}}</option>
-            {% endfor %}
-        </select>
-        {% elif nomBillet == '2 jours' %}
-        <p>Vous avez choisi un billet 2 jours</p>
-        <p>Voici les journées disponibles : </p>
-        <select>
-            {% for jour in duo_disponible %}
-                <option value="{{ jour }}">{{ jour | datetime_format}}</option>
-            {% endfor %}
-        </select>
-        {% endif %}
-        {% if nomBillet == 'Totalité du festival' %}
-        <p>Vous avez choisi un billet totalité du festival</p>
-        {% endif %} 
-        <label for="prix">Prix du billet : </label>
-        <label for="quantite">Quantité : </label>
-        <input type="number" name="quantite" id="quantite" value="1" min="1"  max="3" required>
-    </section>
-    <input class="valider" type="submit" id="valider" name="valider" value="Acheter le billet"/>
-</form>
+        <section class="Acheter_billet">
+            <h1>Acheter un billet</h1>
+            {% if nomBillet == 'Journée' %}
+                <p>Vous avez choisi un billet journée</p>
+                <p>Voici les journées disponibles : </p>
+                <select id="jourSelect" name="selectedDay">
+                    {% for jour in jours_dispo %}
+                        <option value="{{ jour }}" data-jour="{{ jour }}">{{ jour  | datetime_format}}</option>
+                    {% endfor %}
+                </select>
+                <div id="evenementsList"></div>
+            {% elif nomBillet == '2 jours' %}
+                <p>Vous avez choisi un billet 2 jours</p>
+                <p>Voici les journées disponibles : </p>
+                <select id="jourSelect" name="selectedDay">
+                    {% for jour in combinaisons_successives_affcihe %}
+                        <option value="{{ jour }}" data-jour="{{ jour }}">{{ jour }}</option>
+                    {% endfor %}
+                </select>
+                <div id="evenementsList"></div>
+            {% endif %}
+            {% if nomBillet == 'Totalité du festival' %}
+                <p>Vous avez choisi un billet totalité du festival</p>
+                <p>Voici les évènements disponibles : </p>
+                {% for event in evenements_disponibles %}
+                    <div class="event">
+                        <a class="evt" href="#">
+                            <p>{{ event.nomEvent }}</p>
+                            <p>{{ event.typeEvent }}</p>
+                            <p>{{ event.dateHeureDebutEvent | datetime_format }} - {{ event.dateHeureFinEvent | datetime_format('%Hh:%M') }}</p>
+                            <p>{{ event.adresseEvent }}</p>
+                            <p>{{ event.nbPlaceEvent }}</p>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endif %} 
+            <label for="prix">Prix du billet : </label>
+            <label for="quantite">Quantité : </label>
+            <input type="number" name="quantite" id="quantite" value="1" min="1"  max="3" required>
+        </section>
+        <input class="valider" type="submit" id="valider" name="valider" value="Acheter le billet"/>
+    </form>
+    
 {% endblock %}
