@@ -92,7 +92,7 @@
     margin-left: 25%;
     margin-right: 25%;
     margin-top: 100%;
-    padding:2%;
+    padding:3%;
     border-radius: 2%;
     background-color: rgba(0, 0, 0, 0.4);
     color: white;
@@ -114,7 +114,7 @@
 }
 
 .grp:hover{
-    transform: scale(1.1);
+    transform: scale(1.2);
     text-decoration: underline;
     text-underline-offset: 20%;
 }
