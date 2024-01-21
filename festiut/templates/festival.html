@@ -11,7 +11,9 @@
     <p>Jusqu'au {{ festival.finFest | datetime }}</p>
     {{ festival.imageFestival | byte_to_image | safe }}
 
-    <h1>Programmes du festival</h1>
+    <h1>Programmes du festival <a class="acheterBillet" href="{{ url_for('billeterie', idFestival=festival.idFestival) }}">
+        Acheter un billet
+    </a></h1>
 
     {% for day in events_by_day %}
         <h2><a href="{{ url_for('day_detail', festival_id=festival.idFestival, day=day.strftime('%Y-%m-%d')) }}">{{ day }}</a></h2>

@@ -198,6 +198,23 @@ def day_detail(festival_id, day):
 
 from flask import request
 
+@app.route("/reserver/<int:idEvent>/")
+def reserver(idEvent):
+    event = Event.query.get(idEvent)
+    referrer = request.referrer
+    if event is None or event.nbPlaceEvent == len(event.reservations) or event.dateHeureFinEvent < datetime.now():
+        if referrer and request.host in referrer:
+            return redirect(referrer)
+        else:
+            return redirect(url_for('home'))
+    Reserver.reserver_event(idEvent, current_user.nom)
+    Billet.acheter_billet(current_user.nom, event.idFestival, datetime.now(), event.dateHeureDebutEvent, event.dateHeureFinEvent, 0, 1)
+    flash("Votre réservation a bien été prise en compte", "success")
+    if referrer and request.host in referrer:
+        return redirect(referrer)
+    else:
+        return redirect(url_for('home'))
+
 @app.route('/festival/<int:festival_id>/day/<string:day>/filter_by_location')
 def filter_by_location(festival_id, day):
     festival = Festival.query.get_or_404(festival_id)
@@ -237,7 +254,11 @@ def login():
         if user:
             login_user(user)
             flash ("Bon retour parmis nous " + user.nom, "success")
-            return redirect(url_for("home"))
+            referrer = request.referrer
+            if referrer and request.host in referrer:
+                return redirect(referrer)
+            else:
+                return redirect(url_for('home'))
     return render_template("login.html", form=f)
 
 @app.route("/register/", methods =("GET","POST" ,))
@@ -248,7 +269,11 @@ def register():
         if user:
             login_user(user)
             flash ("Bienvenue parmis nous " + user.nom, "success")
-            return redirect(url_for("home"))
+            referrer = request.referrer
+            if referrer and request.host in referrer:
+                return redirect(referrer)
+            else:
+                return redirect(url_for('home'))
     return render_template("register.html", form=f)
 
 @app.route("/logout/")

@@ -32,7 +32,9 @@
 
     <h1>{{ festival.nomFestival }}</h1>
 
-    <h2>Événements du festival pour le {{ day }}</h2>
+    <h2>Événements du festival pour le {{ day }} <a class="acheterBillet" href="{{ url_for('billeterie', idFestival=festival.idFestival) }}">
+        Acheter un billet
+    </a></h2>
 
     <div class="days-container">
         {% for event_day in events_by_day %}
@@ -49,7 +51,8 @@
             <p>{{ event.typeEvent }}</p>
             <p>{{ event.dateHeureDebutEvent | datetime_format }} - {{ event.dateHeureFinEvent | datetime_format('%Hh:%M') }}</p>
             {% if event.estGratuit %}
-                <a>Réserver</a>
+                <p>{{ event.reservations }}</p>
+                <a href="{{ url_for('reserver', idEvent=event.idEvent) }}">Réserver</a>
             {% endif %}
             <p>{{ event.reservations|lenght }} / {{ event.nbPlaceEvent if event.nbPlaceEvent > 0 else "illimité" }}</p>
             <p>{{ event.adresseEvent }}</p>
