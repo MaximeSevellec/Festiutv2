@@ -43,29 +43,9 @@
             {% endif %}
         {% endfor %}
     </div>
-<<<<<<< HEAD
     <p class="info">Passez la souris sur les images pour plus d'informations</p>
     <div class="affichageDetail">
         {% for event in events_for_day %}
-            <div class="event">
-                {% if event.imageEvent %}
-                    <img class="imgProg" src="{{ event.imageEvent}}" alt="image du programme">
-                {% endif %}
-                <div class="evt" href="#">
-                    <p><strong>Nom de l'évènement : </strong>{{ event.nomEvent }}</p>
-                    <p><strong>Le type d'évènement : </strong>{{ event.typeEvent }}</p>
-                    <p><strong>Durée de l'évènement : </strong>{{ event.dateHeureDebutEvent | datetime_format('%Hh:%M') }} - {{ event.dateHeureFinEvent | datetime_format('%Hh:%M') }}</p>
-                    <p class="gratuitPayant">{{"Évènement Gratuit" if event.estGratuit else "Évènement Payant" }}</p>
-                    <p><strong>Adresse de l'évènement : </strong>{{ event.adresseEvent }}</p>
-                    <p><strong>Nombre de place : </strong>{{ event.nbPlaceEvent }}</p>
-                    <p>{{ "" if event.imageEvent == None else event.imageEvent }}</p>
-                </div>
-            </div>
-        {% endfor %}
-    </div>   
-=======
-    
-    {% for event in events_for_day %}
     <div class="event">
         <a class="evt" href="#">
             <p>{{ event.nomEvent }}</p>
@@ -80,7 +60,7 @@
             {{ event.imageEvent | byte_to_image | safe }}
         </a>
     </div>
-    
+
     {% endfor %}
->>>>>>> 104318d3fd38a5e00734edb8d1a6c2feb05fe8ab
+    </div>   
 {% endblock %}

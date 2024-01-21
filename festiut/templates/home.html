@@ -19,7 +19,7 @@
                     {{ festival.imageFestival | byte_to_image | safe }}
                     <a class="plusDetail" href="{{ url_for('festival', idFestival=festival.idFestival) }}">+ de détails</a>
                 </div>
-                <a class="acheterBillet" href="#billet">
+                <a class="acheterBillet" href="{{ url_for('billeterie', idFestival=festival.idFestival) }}">
                     Acheter un billet
                 </a>
             </div> 
