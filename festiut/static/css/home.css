@@ -20,7 +20,7 @@
     padding-left: 2%;
     margin-left: 75%;
     margin-right: auto;
-    background-color:rgba(0, 0, 0, 0.7);
+    background-color:rgba(0, 0, 0, 0.4);
     border-radius: 2%;
     transition: transform 0.3s, background-color 0.3s;
 }
@@ -64,10 +64,6 @@
     background-color: rgba(255, 0, 0, 0.3);
 }
 
-.fest, .grp{
-    width: 100%;
-}
-
 #titreGroupe{
     padding-bottom: 1%;
     text-decoration:2px underline;
@@ -82,13 +78,46 @@
 .groupe{
     flex-grow: 1;
     margin: 1em;
-    background-color: #f4f4f4;
+    background-color: white;
     padding: 1em;
     box-shadow: 0 0.2em 0.4em rgba(0, 0, 0, 0.3);
     border-radius: 0.4em;
 }
 
+.afficheInfoGrp>p{
+    text-align: center;
+}
 
+.afficheInfoGrp{
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-top: 100%;
+    padding:2%;
+    border-radius: 2%;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.afficheInfoGrp:hover{
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.grp {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Ajout pour centrer verticalement le texte */
+    align-items: center; /* Ajout pour centrer horizontalement le texte */
+    text-decoration: none;
+    color: #f4f4f4;
+    transition: transform 0.3s, text-decoration 0.3s, text-underline-offset 0.3s;
+}
+
+.grp:hover{
+    transform: scale(1.1);
+    text-decoration: underline;
+    text-underline-offset: 20%;
+}
 
 .image{
     display: block;

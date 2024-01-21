@@ -30,10 +30,11 @@
 <div id="groupes">
     {% for groupe in groupes %}
     <div class="groupe">
+        <div class="afficheInfoGrp">
             {{ groupe.imageGroupe | byte_to_image | safe }}
             <p>{{ groupe.nomGroupe }}</p>
             <a class="grp" href="{{ url_for('groupe', nomGroupe=groupe.nomGroupe) }}">+ de détails</a>
-        </a>
+        </div>
     </div>
     {% endfor %}
 </div>
