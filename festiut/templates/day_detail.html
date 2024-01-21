@@ -48,10 +48,12 @@
             <p>{{ event.nomEvent }}</p>
             <p>{{ event.typeEvent }}</p>
             <p>{{ event.dateHeureDebutEvent | datetime_format }} - {{ event.dateHeureFinEvent | datetime_format('%Hh:%M') }}</p>
-            <p>{{ "Gratuit" if event.estGratuit else "" }}</p>
+            {% if event.estGratuit %}
+                <a>Réserver</a>
+            {% endif %}
+            <p>{{ event.reservations|lenght }} / {{ event.nbPlaceEvent if event.nbPlaceEvent > 0 else "illimité" }}</p>
             <p>{{ event.adresseEvent }}</p>
-            <p>{{ event.nbPlaceEvent }}</p>
-            <p>{{ event.imageEvent }}</p>
+            {{ event.imageEvent | byte_to_image | safe }}
         </a>
     </div>
     
