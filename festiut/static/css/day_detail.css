@@ -1,0 +1,90 @@
+/* day_detail.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+.acheterBillet {
+    display: inline-block;
+    margin: 10px 0;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.acheterBillet:hover {
+    background-color: #45a049;
+}
+
+.days-container {
+    display: flex;
+    margin: 20px 0;
+}
+
+.day {
+    margin-right: 10px;
+    padding: 8px 12px;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.day:hover {
+    background-color: #2980b9;
+}
+
+.affichageDetail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.event {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    width: 300px;
+}
+
+.evt {
+    cursor: pointer;
+}
+
+.event p {
+    margin: 5px 0;
+}
+
+.gratuitPayant {
+    color: #3498db;
+}
+
+.reserver {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.reserver:hover {
+    background-color: #2980b9;
+}
+
+.indisponnible {
+    color: #d9534f;
+    font-weight: bold;
+}

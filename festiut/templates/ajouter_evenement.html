@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block styles %}
+    {{ super() }}
+{% endblock %}
+{% block main %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<h2>Ajouter un Evènement</h2>
+<p id="message-event"></p>
+<form id="formulaire-event" action="" enctype="multipart/form-data">
+
+    <p>Nom de l'évènement</p>
+    <input type="text" name="nomEvent" id="nomEvent" required>
+
+    <p>Type de l'évènement</p>
+    <input type="text" name="typeEvent" id="typeEvent" required>
+
+    <p>Dans quel festival l'évènement se déroule-t-il ?</p>
+    <select name="nomFestival" id="nomFestival" required>
+        <option value="" disabled selected hidden>Choisissez un Festival</option>
+        {% for festival in festivals %}
+            {% if nomFestival is not none and festival.nomFestival == nomFestival %}
+                <option value="{{ festival.nomFestival }}" selected>{{ festival.nomFestival }}</option>
+            {% else %}
+                <option value="{{ festival.nomFestival }}">{{ festival.nomFestival }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+
+    <p>Date et heure de début de l'évènement</p>
+    <input type="datetime-local" name="dateHeureDebutEvent" id="dateHeureDebutEvent" required>
+
+    <p>Date et heure de fin de l'évènement</p>
+    <input type="datetime-local" name="dateHeureFinEvent" id="dateHeureFinEvent" required>
+
+    <p>Est-ce que l'évènement est gratuit ?</p>
+    <input type="checkbox" name="gratuitEvent" id="gratuitEvent">
+
+    <p>Adresse de l'évènement</p>
+    <input type="text" name="adresseEvent" id="adresseEvent" required>
+
+    <p>Nombre de places disponibles</p>
+    <input type="number" min="-1" name="nbPlaceEvent" id="nbPlaceEvent" required>
+
+    <p>Nom du groupe</p>
+    <select name="nomGroupe" id="selectionner-groupe">
+        <option value="" disabled selected hidden>Choisissez un groupe</option>
+        {% for groupe in groupes %}
+            <option value="{{ groupe.nomGroupe }}">{{ groupe.nomGroupe }}</option>
+        {% endfor %}
+    </select>
+    <button type="button" onclick="deselectionnerOption()">Désélectionner</button>
+
+    <p>Nom du logement</p>
+    <input type="text" name="nomLogement" id="nomLogement">
+    <p>Type de logement</p>
+    <input type="text" name="typeLogement" id="typeLogement">
+    <p>Nombre de places disponibles</p>
+    <input type="number" min="-1" name="nbPlaceLogement" id="nbPlaceLogement">
+    <p>Prix du logement</p>
+    <input type="number" min="-1" name="prixLogement" id="prixLogement">
+    <p>Date et heure de début du logement</p>
+    <input type="datetime-local" name="dateDebutLogement" id="dateDebutLogement">
+    <p>Date et heure de fin du logement</p>
+    <input type="datetime-local" name="dateFinLogement" id="dateFinLogement">
+    <p>Adresse du logement</p>
+    <input type="text" name="adresseLogement" id="adresseLogement">
+    
+    <p>Image de l'évènement</p>
+    <input type="file" name="imageEvent" id="imageEvent">
+
+    <button type="submit" onclick="envoyerFormulaireEvent()">Ajouter le festival</button>
+</form>
+<script src="{{ url_for('static', filename='js/formulaire_listener.js') }}"></script>
+<script src="{{ url_for('static', filename='js/formulaire_ajax.js') }}"></script>
+{% endblock %}

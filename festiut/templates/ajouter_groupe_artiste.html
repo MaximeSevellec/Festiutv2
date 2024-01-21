@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block styles %}
+    {{ super() }}
+{% endblock %}
+{% block main %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ajoutGroupeArtiste.css')}}">
+<div class="parent">
+    <div class="artiste">
+        <h2>Ajouter un Artiste</h2>
+        <p id="message-artiste"></p>
+        <form id="formulaire-artiste" action="" enctype="multipart/form-data">
+            <p>Nom de l'artiste : </p>
+            <input type="text" name="nomArtiste" id="nomArtiste" placeholder="Nom de l'artiste" required>
+            <p>Nom du groupe : </p>
+            <select id="selectionner-groupe" name="nomGroupe" id="nomGroupe">
+                <option value="" disabled selected hidden>Choisissez un groupe</option>
+                {% for groupe in groupes %}
+                    <option value="{{ groupe.nomGroupe }}">{{ groupe.nomGroupe }}</option>
+                {% endfor %}
+            </select>
+            <button type="button" onclick="deselectionnerOption()">Désélectionner</button>
+            <p>Style de musique : </p>
+            <input type="text" name="styleArtiste" id="styleArtiste" placeholder="Style de musique" required>
+            <p>URL Instagram : </p>
+            <input type="text" name="urlInstaArtiste" id="urlInstaArtiste" placeholder="URL Instagram">
+            <p>URL Youtube : </p>
+            <input type="text" name="urlYoutubeArtiste" id="urlYoutubeArtiste" placeholder="URL Youtube">
+            <p>Image de l'artiste : </p>
+            <input type="file" name="imageArtiste" id="imageArtiste" accept="image/png, image/jpeg, image/jpg">
+
+            <button type="submit" onclick="envoyerFormulaireArtiste()">Ajouter l'artiste</button>
+        </form>
+    </div>
+    <div class="groupe">
+        <h2>Ajouter un groupe</h2>
+        <p id="message-groupe"></p>
+        <form action="" id="formulaire-groupe" enctype="multipart/form-data">
+            <p class="grpName">Nom du groupe : </p>
+            <input type="text" name="nomGroupe" id="nomGroupe" placeholder="Nom du groupe" required>
+            <p>Image du groupe : </p>
+            <input type="file" name="imageGroupe" id="imageGroupe" accept="image/png, image/jpeg, image/jpg">
+
+            <button type="submit" onclick="envoyerFormulaireGroupe()">Ajouter le groupe</button>
+        </form>
+        <script src="{{ url_for('static', filename='js/formulaire_listener.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/formulaire_ajax.js') }}"></script>
+    </div>
+</div>
+{% endblock %}

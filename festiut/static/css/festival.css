@@ -1,0 +1,44 @@
+h1{
+    padding-left: 0.5%;
+    text-decoration: underline;
+    text-underline-offset: 10%;
+}
+
+.infoFest{
+    font-size: 120%;
+}
+
+.ensProg,.ensGroupe,.infoFest{
+    margin: 0.5%;
+    margin-left: 1%;
+}
+
+.dateProg,.nomGroupe{
+    display: inline-block;
+    text-decoration: none;
+    margin-right: 90%;
+    color: #2874A6;
+    font-size: 110%;
+    font-weight: bold;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.dateProg:hover, .nomGroupe:hover{
+    color: #3498DB;
+    transform: scale(1.1);
+}
+
+.acheterBillet{
+    display: inline-block;
+    font-size: 120%;
+    color: navy;
+    text-decoration: thin;
+    text-underline-offset: 20%;
+    transition: color 0.3s, transform 0.3s, text-decoration 0.3s,text-underline-offset 0.3s;
+}
+.acheterBillet:hover{
+    color: blue;
+    transform: scale(1.1);
+    text-decoration: underline;
+    text-underline-offset: 30%;
+}

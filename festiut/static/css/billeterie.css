@@ -1,0 +1,38 @@
+.placementBillet {
+    
+    display: flex;
+    justify-content: center; /* Centre les éléments horizontalement */
+}
+
+h1{
+    margin: 1%;
+    text-align: center;
+    text-decoration: underline;
+    text-underline-offset: 20%;
+    font-size: 250%;
+    padding-bottom: 1%;
+}
+
+.billet{
+    margin: 3%;
+    padding-bottom: 2%;
+    transition: transform 0.3s;
+}
+
+.div_img {
+    width: 85%;
+    height: auto;
+    box-sizing: border-box;
+    object-fit: cover;
+    margin: 0 auto; /* Centre les éléments horizontalement */
+}
+
+.img_acc {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.billet:hover{
+    transform: scale(1.3);
+}

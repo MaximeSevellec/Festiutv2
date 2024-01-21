@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+<title>{{ title }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+    <div id="wrapper">
+        <header id="header">
+            <nav id="navbar">
+                <div class="left">
+                    <ul>
+                        <li><a class="logo" href="{{ url_for('home') }}">FestIUT'O</a></li>
+                        <li><a class="lien" href="{{ url_for('billeterie') }}">Billeterie</a></li>
+                    </ul>
+
+                </div>
+                <div class="right">
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.role == 'Admin' %}
+                        <select class="menuDeroulant" onchange="window.location.href=this.value">
+                            <option value="" selected disabled>Sélectionnez une option</option>
+                            <option value="{{ url_for('ajouter_groupe_artiste') }}">Ajouter nouveau Artiste/Groupe</option>
+                            <option value="{{ url_for('ajouter_festival') }}">Créer un nouveau festival</option>
+                            <option value="{{ url_for('assigner_groupe_event_sans_groupe') }}">Évent : assigné un groupe</option>
+                        </select>
+                        {% endif %}
+                            <a href="{{ url_for('logout') }}"><img class="user" src="{{ url_for('static', filename='image/logout.png') }}"></a>
+                    {% else %}
+                            <a href="{{ url_for('login') }}"><img class="user" src="{{ url_for('static', filename='image/utilisateur.png') }}"></a>
+                    {% endif %}
+                </div>
+            </nav>
+        </header>
+        {% block flash %}
+            <div id="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                            <div class="progress-bar"></div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <script src="{{ url_for('static', filename='js/notification.js')}}"></script>
+        </div>
+        {% endblock %}
+        <main id="main">
+            <div class="container">
+                {% block main %}{% endblock %}
+            </div>
+    </div>
+        </main>
+    <footer id="footer">
+            <p> Copyright © Tous droits réservés - FestIUT'O </p>
+            <ul>
+                <li>OZOCAK Ibrahim</li>
+                <li>SEVELLEC Maxime</li>
+                <li>BRISSET Léo</li>
+            </ul>
+    </footer>
+</body>
+</html>

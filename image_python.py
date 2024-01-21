@@ -1,0 +1,1 @@
+{{ concert.imageEvent | byte_to_image | safe }}
