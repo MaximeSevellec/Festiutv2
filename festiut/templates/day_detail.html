@@ -57,6 +57,8 @@
         </div>
         {% if event.estGratuit %}
         <a class="reserver" href="{{ url_for('reserver', idEvent=event.idEvent) }}">Réserver</a>
+        {%else %}
+        <p class="indisponnible">Non réservable</p>
     {% endif %}
     </div>
     
