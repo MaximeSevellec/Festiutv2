@@ -5,30 +5,25 @@ h1{
 }
 
 .infoFest{
-    background-color: aqua;
+    font-size: 130%;
 }
 
-.ensGroupe{
-    background-color: blueviolet;
-}
-
-.ensProg{
+.ensProg,.ensGroupe,.infoFest{
     margin: 0.5%;
     margin-left: 1%;
 }
 
-.dateProg{
+.dateProg,.nomGroupe{
     display: inline-block;
     text-decoration: none;
     margin-right: 90%;
-    color: black;
+    color: #2874A6;
     font-size: 130%;
-    transition: color 0.3s, transform 0.3s, text-decoration 0.3s, text-underline-offset 0.5s;
+    font-weight: bold;
+    transition: color 0.3s, transform 0.3s;
 }
 
-.dateProg:hover{
-    color: rgb(49, 49, 49);
+.dateProg:hover, .nomGroupe:hover{
+    color: #3498DB;
     transform: scale(1.2);
-    text-decoration: underline;
-    text-underline-offset: 10%;
 }

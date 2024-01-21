@@ -7,10 +7,10 @@
 
     <h1>Information sur le festival</h1>
     <div class="infoFest">
-        <p>{{ festival.nomFestival }}</p>
-        <p>{{ festival.villeFestival }} {{ festival.codePostalFestival }}</p>
-        <p>Du {{ festival.debutFest | datetime }}</p>
-        <p>Jusqu'au {{ festival.finFest | datetime }}</p>
+        <p><strong>Nom du Festival : </strong>{{ festival.nomFestival }}</p>
+        <p><strong>Adresse : </strong>{{ festival.villeFestival }} {{ festival.codePostalFestival }}</p>
+        <p><strong>Du </strong>{{ festival.debutFest | datetime }}</p>
+        <p><strong>Jusqu'au </strong>{{ festival.finFest | datetime }}</p>
         {{ festival.imageFestival | byte_to_image | safe }}
     </div>
 
@@ -29,10 +29,10 @@
     {% endif %}
 
     <h1>Groupes présents au festival</h1>
-    <div class="ensGroupe">
         {% for groupe in groupes %}
-            <a class="nomGrp" href="{{ url_for('groupe', nomGroupe=groupe.nomGroupe) }}">{{ groupe.nomGroupe }}</a>
-        </div>    
+            <div class="ensGroupe">
+                <a class="nomGroupe" href="{{ url_for('groupe', nomGroupe=groupe.nomGroupe) }}">{{ groupe.nomGroupe }}</a>
+            </div>    
         {% endfor %}
         {% if current_user.is_authenticated and current_user.role == 'Admin' %}
         <a href="{{ url_for('ajouter_groupe_festival', idFestival=festival.idFestival) }}">Ajouter un groupe au festival</p>
