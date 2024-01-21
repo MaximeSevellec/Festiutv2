@@ -31,30 +31,28 @@ h1,h2{
 }
 
 .event {
-    padding: auto;
+    background-color: white;
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     height: 50vh;
-    flex-grow: 0; 
-    margin-top: 1%;
-    margin-bottom: 1%;
+    width: 25vw;
+    flex-grow: 0; /* empêche la div de s'étendre au-delà de sa taille naturelle */
+    margin: 2%;
     padding: 0%;
     box-shadow: 0 0.2em 0.4em rgba(0, 0, 0, 0.3);
     border-radius: 2%;
     opacity: 1;
 }
 
+strong{
+    text-decoration: underline;
+}
 
 .event:hover .evt{
     opacity: 1;
 }
 
-.ici:hover{
-    opacity: 0;
-}
-
 .evt{
-    flex-wrap: nowrap;
     width: 100%;
     height: 100%;
     border-radius: 2%;
@@ -62,6 +60,7 @@ h1,h2{
     color: white;
     opacity: 0;
     transition: opacity 0.3s;
+    text-decoration: none;
 }
 
 .evt>p{
@@ -70,4 +69,38 @@ h1,h2{
 
 .gratuitPayant{
     font-weight: bold;
+}
+
+.reserver{
+    margin-top: 1%;
+    display: inline-block;
+    font-size: 130%;
+    color: navy;
+    text-decoration: thin;
+    text-underline-offset: 20%;
+    transition: color 0.3s, transform 0.3s, text-decoration 0.3s,text-underline-offset 0.3s;
+}
+
+.reserver:hover{
+    color: blue;
+    transform: scale(1.2);
+    text-decoration: underline;
+    text-underline-offset: 30%;
+}
+
+.acheterBillet{
+    display: inline-block;
+    font-size: 120%;
+    padding-left: 1.5%;
+    color: navy;
+    text-decoration: thin;
+    text-underline-offset: 10%;
+    transition: color 0.3s, transform 0.3s, text-decoration 0.3s,text-underline-offset 0.3s;
+}
+
+.acheterBillet:hover{
+    color: blue;
+    transform: scale(1.1);
+    text-decoration: underline;
+    text-underline-offset: 20%;
 }

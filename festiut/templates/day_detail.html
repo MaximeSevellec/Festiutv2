@@ -31,10 +31,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/day_detail.css')}}">
 
     <h1>{{ festival.nomFestival }}</h1>
-
-    <h2>Événements du festival pour le {{ day }} <a class="acheterBillet" href="{{ url_for('billeterie', idFestival=festival.idFestival) }}">
-        Acheter un billet
-    </a></h2>
+    <a class="acheterBillet" href="{{ url_for('billeterie', idFestival=festival.idFestival) }}">Acheter un billet</a>
+    <h2>Événements du festival pour le {{ day }}</h2>
 
     <div class="days-container">
         {% for event_day in events_by_day %}
@@ -47,19 +45,21 @@
     <div class="affichageDetail">
         {% for event in events_for_day %}
     <div class="event">
-        <a class="evt" href="#">
-            <p>{{ event.nomEvent }}</p>
-            <p>{{ event.typeEvent }}</p>
-            <p>{{ event.dateHeureDebutEvent | datetime_format }} - {{ event.dateHeureFinEvent | datetime_format('%Hh:%M') }}</p>
-            {% if event.estGratuit %}
-                <a href="{{ url_for('reserver', idEvent=event.idEvent) }}">Réserver</a>
-            {% endif %}
-            <p>{{ event.reservations|lenght }} / {{ event.nbPlaceEvent if event.nbPlaceEvent > 0 else "illimité" }}</p>
-            <p>{{ event.adresseEvent }}</p>
+        <div class="evt" href="#">
+            <p><strong>Nom de l'évènement</strong> : {{ event.nomEvent }}</p>
+            <p><strong>Type d'évènement</strong> : {{ event.typeEvent }}</p>
+            <p><strong>Date de l'évènement</strong> : {{ event.dateHeureDebutEvent | datetime_format }} - {{ event.dateHeureFinEvent | datetime_format('%Hh:%M') }}</p>
+            
+            <p><strong>Nombre de place disponible</strong> : {{ event.reservations|lenght }} / {{ event.nbPlaceEvent if event.nbPlaceEvent > 0 else "illimité" }}</p>
+            <p><strong>Adresse de l'évènement</strong> : {{ event.adresseEvent }}</p>
+            <p class="gratuitPayant">{{"Évènement Gratuit" if event.estGratuit else "Évènement Payant" }}</p>
             {{ event.imageEvent | byte_to_image | safe }}
-        </a>
+        </div>
+        {% if event.estGratuit %}
+        <a class="reserver" href="{{ url_for('reserver', idEvent=event.idEvent) }}">Réserver</a>
+    {% endif %}
     </div>
-
+    
     {% endfor %}
     </div>   
 {% endblock %}
