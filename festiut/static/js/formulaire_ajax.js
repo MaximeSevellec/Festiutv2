@@ -45,3 +45,27 @@ function envoyerFormulaireArtiste() {
         });
     }
 }
+
+function envoyerFormulaireFestival() {
+    if ($('#formulaire-festival')[0].checkValidity()) {
+        var formData = new FormData($('#formulaire-festival')[0]);
+
+        $.ajax({
+            type: 'POST',
+            url: '/ajouter_nouveau_festival',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                if (response.success) {
+                    window.location.reload(true);
+                } else {
+                    $('#message-festival').text(response.message);
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+}

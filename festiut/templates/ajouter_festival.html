@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block styles %}
+    {{ super() }}
+{% endblock %}
+{% block main %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<h2>Ajouter un Festival</h2>
+<p id="message-festival"></p>
+<form id="formulaire-festival" action="" enctype="multipart/form-data">
+
+    <p>Nom du festival</p>
+    <input type="text" name="nomFestival" id="nomFestival" placeholder="Nom du festival" required>
+
+    <p>Ville du festival</p>
+    <input type="text" name="villeFestival" id="villeFestival" placeholder="Ville du festival" required>
+
+    <p>Code postal du festival</p>
+    <input type="text" name="codePostalFestival" id="codePostalFestival" placeholder="Code postal du festival" required>
+
+    <p>Date de début du festival</p>
+    <input type="date" name="debutFest" id="debutFest" placeholder="Date de début du festival" required>
+
+    <p>Date de fin du festival</p>
+    <input type="date" name="finFest" id="finFest" placeholder="Date de fin du festival" required>
+
+    <p>Image du festival</p>
+    <input type="file" name="imageFestival" id="imageFestival" placeholder="Image du festival">
+
+    <button type="submit" onclick="envoyerFormulaireFestival()">Ajouter le festival</button>
+</form>
+<script src="../static/js/formulaire_listener.js"></script>
+<script src="../static/js/formulaire_ajax.js"></script>
+{% endblock %}
