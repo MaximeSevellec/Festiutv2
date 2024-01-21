@@ -4,27 +4,30 @@
 {% endblock %}
 {% block main %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css')}}">
-<h1>Festival en cours ou prochainement</h1>
+
 <div id="festivals">
+    <h1>Festival en cours ou prochainement</h1>
     {% for festival in festivals %}
         <div class="festival">
-            <a class="fest" href="{{ url_for('festival', idFestival=festival.idFestival) }}">
-                <p>Festival numéro°{{ festival.idFestival }}</p>
-                <p>{{ festival.nomFestival }}</p>
-                <p>{{ festival.villeFestival }} {{ festival.codePostalFestival }}</p>
-                <p>Du {{ festival.debutFest | datetime }}</p>
-                <p>Jusqu'au {{ festival.finFest | datetime }}</p>
-                {{ festival.imageFestival | byte_to_image | safe }}
-                + de détails
+            <div class="infoFestival">
+                <div class="fest">
+                    <p>Festival numéro°{{ festival.idFestival }}</p>
+                    <p>{{ festival.nomFestival }}</p>
+                    <p>{{ festival.villeFestival }} {{ festival.codePostalFestival }}</p>
+                    <p>Du {{ festival.debutFest | datetime }}</p>
+                    <p>Jusqu'au {{ festival.finFest | datetime }}</p>
+                    {{ festival.imageFestival | byte_to_image | safe }}
+                    <a class="plusDetail" href="{{ url_for('festival', idFestival=festival.idFestival) }}">+ de détails</a>
+                </div>
                 <a class="acheterBillet" href="#billet">
                     Acheter un billet
                 </a>
-            </a> 
+            </div> 
         </div>
     {% endfor %}
 </div>
-<h1>Quelques groupes présents</h1>
 <div id="groupes">
+    <h1>Quelques groupes présents</h1>
     {% for groupe in groupes %}
         <div class="groupe">
             <a class="grp" href="{{ url_for('groupe', nomGroupe=groupe.nomGroupe) }}">

@@ -1,4 +1,66 @@
-#festivals,#groupes{
+
+#festivals{
+    padding: 3%;
+}
+
+#festivals>h1{
+    padding-bottom: 1%;
+    text-decoration:2px underline;
+    text-underline-offset: 20%;
+}
+
+.festival{
+    display: flex;
+    padding: 2%;
+    box-shadow: 0 0.2em 0.4em rgba(0, 0, 0, 0.3);
+}
+
+.infoFestival{
+    padding: 1%;
+    padding-left: 2%;
+    margin-left: 75%;
+    margin-right: auto;
+    background-color:rgba(0, 0, 0, 0.7);
+    border-radius: 2%;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.infoFestival:hover{
+    transform: scale(1.1);
+    background-color:rgba(0, 0, 0, 0.9);
+}
+
+.fest,.plusDetail,.acheterBillet{
+    text-align: left;
+    text-decoration:none ;
+    margin-left: 0%;
+    color: #f4f4f4;
+}
+
+.plusDetail{
+    padding-top: 1%;
+    display: inline-block;
+    transition: transform 0.3s, text-decoration 0.3s, text-decoration 0.3s,text-underline-offset 0.3s;
+}
+.plusDetail:hover{
+    transform: scale(1.1);
+    text-decoration: underline;
+    text-underline-offset: 20%;
+}
+
+.acheterBillet{
+    display: inline-block;
+    padding-top: 1%;
+    transition:transform 0.3s, text-decoration 0.3s,text-underline-offset 0.3s,font-size 0.3s;
+}
+
+.acheterBillet:hover{
+    transform: scale(1.1);
+    text-decoration: underline;
+    text-underline-offset: 20%;
+}
+
+#groupes{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -10,7 +72,7 @@
     flex-wrap: wrap;
 }
 
-.festival, .groupe{
+.groupe{
     flex-grow: 1;
     margin: 1em;
     background-color: #f4f4f4;
@@ -26,10 +88,6 @@
 
 .fest, .grp{
     width: 100%;
-}
-
-.acheterBillet{
-    display: block;
 }
 
 .image{
