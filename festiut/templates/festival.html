@@ -4,20 +4,22 @@
 {% endblock %}
 {% block main %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/festival.css')}}">
+    <h1>Information sur le Festival</h1>
+    <div class="infoFest">
+        <p><strong>Nom du festival : </strong>{{ festival.nomFestival }}</p>
+        <p><strong>Adresse du festival : </strong>{{ festival.villeFestival }} {{ festival.codePostalFestival }}</p>
+        <p><strong>Du</strong> {{ festival.debutFest | datetime }}</p>
+        <p><Strong>Jusqu'au</Strong> {{ festival.finFest | datetime }}</p>
+        <a class="acheterBillet" href="{{ url_for('billeterie', idFestival=festival.idFestival) }}">Acheter un billet</a>
+        {{ festival.imageFestival | byte_to_image | safe }}
+    </div>
+    <h1>Programmes du festival</h1>
 
-    <p>{{ festival.nomFestival }}</p>
-    <p>{{ festival.villeFestival }} {{ festival.codePostalFestival }}</p>
-    <p>Du {{ festival.debutFest | datetime }}</p>
-    <p>Jusqu'au {{ festival.finFest | datetime }}</p>
-    {{ festival.imageFestival | byte_to_image | safe }}
-
-    <h1>Programmes du festival <a class="acheterBillet" href="{{ url_for('billeterie', idFestival=festival.idFestival) }}">
-        Acheter un billet
-    </a></h1>
-
+    <div class="ensProg">
     {% for day in events_by_day %}
-        <h2><a href="{{ url_for('day_detail', festival_id=festival.idFestival, day=day.strftime('%Y-%m-%d')) }}">{{ day }}</a></h2>
+        <h2><a class="dateProg" href="{{ url_for('day_detail', festival_id=festival.idFestival, day=day.strftime('%Y-%m-%d')) }}">{{ day }}</a></h2>
     {% endfor %}
+    </div>
 
     {% if events_by_day|lenght == 0 %}
         <p>Aucun programme n'est disponible pour le moment</p>
@@ -27,10 +29,12 @@
     {% endif %}
 
     <h1>Groupes présents au festival</h1>
+        <div class="ensGroupe">
         {% for groupe in groupes %}
-            <h2><a href="{{ url_for('groupe', nomGroupe=groupe.nomGroupe) }}">{{ groupe.nomGroupe }}</a></h2>
+            <h2><a class="nomGroupe" href="{{ url_for('groupe', nomGroupe=groupe.nomGroupe) }}">{{ groupe.nomGroupe }}</a></h2>
         {% endfor %}
+        </div>
         {% if current_user.is_authenticated and current_user.role == 'Admin' %}
-        <a href="{{ url_for('ajouter_groupe_festival', idFestival=festival.idFestival) }}">Ajouter un groupe au festival</p>
+        <a href="{{ url_for('ajouter_groupe_festival', idFestival=festival.idFestival) }}">Ajouter un groupe au festival</a>
     {% endif %}
 {% endblock %}
