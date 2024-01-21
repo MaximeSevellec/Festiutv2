@@ -55,6 +55,10 @@ def byte_to_image(byte):
     image_base64 = base64.b64encode(byte).decode('utf-8')
     return Markup(f'<img class="image" src="data:image/png;base64,{image_base64}" alt="Image">')
 
+@app.template_filter('lenght')
+def lenght(liste):
+    return len(liste)
+
 @app.route("/")
 def home():
     festivals = []
@@ -63,18 +67,11 @@ def home():
         min_dateheure = Event.query.filter(Event.idFestival == festival.idFestival).with_entities(func.min(Event.dateHeureDebutEvent)).scalar()
         max_dateheure = Event.query.filter(Event.idFestival == festival.idFestival).with_entities(func.max(Event.dateHeureFinEvent)).scalar()
 
-        if min_dateheure is None or max_dateheure is None:
-            continue
-
-        if Event.query.filter(Event.idFestival == festival.idFestival).with_entities(Event.nom_groupe, func.min(Event.dateHeureDebutEvent)).first()[0] is None:
-            continue
-
-        if Event.query.filter(Event.idFestival == festival.idFestival).with_entities(Event.nom_groupe, func.max(Event.dateHeureDebutEvent)).first()[0] is None:
-            continue
-
         festival_temp = copy.copy(festival)
-        festival_temp.debutFest = min_dateheure
-        festival_temp.finFest = max_dateheure
+        if min_dateheure is not None:
+            festival_temp.debutFest = min_dateheure
+        if max_dateheure is not None:
+            festival_temp.finFest = max_dateheure
         
         festivals.append(festival_temp)
 
@@ -211,6 +208,15 @@ def ajouter_groupe_artiste():
     groupes = Groupe.query.all()
     return render_template("ajouter_groupe_artiste.html", groupes=groupes)
 
+@app.route("/ajouter_groupe_festival/<int:idFestival>")
+@app.route("/ajouter_groupe_festival/", defaults={'idFestival': 0})
+def ajouter_groupe_festival(idFestival):
+    if not current_user.is_authenticated or current_user.role != "Admin":
+        return redirect(url_for("home"))
+    festival = Festival.query.get(idFestival)
+    events = Event.query.filter(Event.idFestival == idFestival, Event.nom_groupe == None).order_by(Event.dateHeureDebutEvent).all()
+    return render_template("ajouter_groupe_festival.html", festival=festival, events=events)
+
 @app.route('/ajouter_nouveau_artiste', methods=['POST'])
 def ajouter_nouveau_artiste():
 
@@ -261,6 +267,8 @@ def ajouter_nouveau_groupe():
 @app.route("/festival/<int:idFestival>/")
 def festival(idFestival):
     festival = Festival.query.get(idFestival)
+    if festival is None:
+        return redirect(url_for("home"))
     events = Event.query.filter(Event.idFestival == idFestival).order_by(Event.dateHeureDebutEvent).all()
     groupes = Groupe.query.join(Event, Groupe.nomGroupe == Event.nom_groupe).filter(Event.idFestival == idFestival).all()
 
@@ -270,7 +278,7 @@ def festival(idFestival):
         if day not in events_by_day:
             events_by_day[day] = []
         events_by_day[day].append(event)
-    return render_template("festival.html", festival=festival, events=events, groupes=groupes, events_by_day=events_by_day)
+    return render_template("festival.html", festival=festival, events=events, groupes=groupes, events_by_day=events_by_day, )
 
 @app.route("/ajouter_festival/")
 def ajouter_festival():
@@ -308,13 +316,19 @@ def voir_festivals():
     festivals = Festival.query.order_by(Festival.debutFest).all()
     return render_template("voir_festivals.html", festivals=festivals)
 
-@app.route("/ajouter_evenement/")
-def ajouter_evenement():
+@app.route("/ajouter_evenement/<int:idFestival>")
+@app.route("/ajouter_evenement/", defaults={'idFestival': 0})
+def ajouter_evenement(idFestival):
     if not current_user.is_authenticated or current_user.role != "Admin":
         return redirect(url_for("home"))
     festivals = Festival.query.order_by(Festival.debutFest).all()
     groupes = Groupe.query.all()
-    return render_template("ajouter_evenement.html", festivals=festivals, groupes=groupes)
+    nomFest = None
+    if idFestival is not None:
+        nomFest = Festival.query.get(idFestival)
+        if nomFest is not None:
+            nomFest = nomFest.nomFestival
+    return render_template("ajouter_evenement.html", festivals=festivals, groupes=groupes, nomFestival=nomFest)
 
 @app.route("/ajouter_nouveau_event", methods=['POST'])
 def ajouter_nouveau_event():
@@ -352,8 +366,6 @@ def ajouter_nouveau_event():
         dateFinLogement = data['dateFinLogement'] if 'dateFinLogement' in data.keys() else None
         adresseLogement = data['adresseLogement'] if 'adresseLogement' in data.keys() else None
 
-        print(nomLogement, typeLogement, nbPlaceLogement, prixLogement, dateDebutLogement, dateFinLogement, adresseLogement)
-
         if nomLogement is not None and typeLogement is not None and nbPlaceLogement is not None and prixLogement is not None and dateDebutLogement is not None and dateFinLogement is not None and adresseLogement is not None:
             if Logement.ajouter_nouveau_logement(nomGroupe=nom_groupe, nomLogement=nomLogement, typeLogement=typeLogement, nbPlaceLogement=nbPlaceLogement, prixLogement=prixLogement, dateDebutLogement=dateDebutLogement, dateFinLogement=dateFinLogement, adresseLogement=adresseLogement, idFestival=idFestival):
                 return jsonify({'success': True})
@@ -366,7 +378,7 @@ def ajouter_nouveau_event():
 def assigner_groupe_event_sans_groupe():
     if not current_user.is_authenticated or current_user.role != "Admin":
         return redirect(url_for("home"))
-    events = Event.query.filter(Event.nom_groupe == None).all()
+    events = Event.query.join(Festival).filter(Event.nom_groupe == None).all()
     return render_template("assigner_groupe_event_sans_groupe.html", events=events)
 
 @app.route("/assigner_groupe/<int:idEvent>/")
@@ -374,6 +386,8 @@ def assigner_groupe(idEvent):
     if not current_user.is_authenticated or current_user.role != "Admin":
         return redirect(url_for("home"))
     event = Event.query.get(idEvent)
+    if event is None:
+        return redirect(url_for("home"))
     if event.nom_groupe is not None:
         return redirect(url_for("home"))
     groupes = Groupe.query.all()

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block styles %}
+    {{ super() }}
+{% endblock %}
+{% block main %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<h2>Ajouter un groupe au festival</h2>
+
+{% for event in events %}
+    <p>{{ event.nomEvent }}</p>
+    {% if current_user.is_authenticated and current_user.role == 'Admin' %}
+        <a href="{{ url_for('assigner_groupe', idEvent=event.idEvent) }}">Assigner un groupe à cet évènement</p>
+    {% endif %}
+{% endfor %}
+
+{% if events|length == 0 %}
+    <p>Aucun évènement n'est disponible pour le moment</p>
+{% endif %}
+{% if current_user.is_authenticated and current_user.role == 'Admin' %}
+        <a href="{{ url_for('ajouter_evenement', idFestival=festival.idFestival) }}">Ajouter un évènement</p>
+    {% endif %}
+<script src="{{ url_for('static', filename='js/formulaire_listener.js') }}"></script>
+<script src="{{ url_for('static', filename='js/formulaire_ajax.js') }}"></script>
+{% endblock %}
