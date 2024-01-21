@@ -102,6 +102,7 @@ def billeterie(idFestival):
 @app.route("/info_billet/<string:nomBillet>/<int:idFestival>")
 @app.route("/info_billet/<string:nomBillet>/", defaults={'idFestival': 0})
 def info_billet(nomBillet, idFestival):
+    locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
     festival = Festival.query.get(idFestival)
     festivals = Festival.query.all()
     if festival:
@@ -113,10 +114,7 @@ def info_billet(nomBillet, idFestival):
 
         jours_dispo = [debut_festival + timedelta(days=i) for i in range(duree_festival)]
 
-        import locale
-        locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
-
-        jours_disponibles_formates = [date.strftime('%A %d %B %H:%M') for date in jours_dispo]
+        jours_disponibles_formates = [date.strftime('%A %d %B %Y %H:%M') for date in jours_dispo]
 
         combinaisons_jours = list(combinations(jours_disponibles_formates, 2))
         combinaisons_successives = [comb for comb in combinaisons_jours if jours_disponibles_formates.index(comb[0]) == jours_disponibles_formates.index(comb[1]) - 1]
@@ -131,32 +129,47 @@ def info_billet(nomBillet, idFestival):
 
     return render_template("info_billet.html", festival=festival, festivals=festivals, nomBillet=nomBillet, jours_dispo=jours_dispo, combinaisons_successives_affcihe=combinaisons_successives_affcihe, evenements_disponibles=evenements_disponibles )
 
+@app.route("/get_events", methods=['POST'])
+def get_events():
+    idFestival = request.form.to_dict()['nomFest']
+    date = request.form.to_dict()['selectedDate']
+
+    events = []
+
+    events_du_festival = Event.query.filter(Event.idFestival == idFestival).all()
+    date_format = '%A %d %B %Y %H:%M'
+
+    if date == "TOUT":
+        for event in events_du_festival:
+            events.append(event.to_json())
+    else:
+        for d in date.split(" - "):
+            for event in events_du_festival:
+                event_date_str = event.dateHeureDebutEvent.strftime('%A %d %B %Y %H:%M')
+                if datetime.strptime(event_date_str, date_format).date() == datetime.strptime(d, date_format).date():
+                    events.append(event.to_json())
+    
+    return jsonify({'events': events})
+
 @app.route('/get_dates', methods=['POST'])
 def get_dates():
-    nom_festival = request.form.to_dict()['nom_festival']
+    idFestival = request.form.get('idFestival')
+    nomBillet = request.form.get('nomBillet')
 
-    festival = Festival.query.filter(Festival.nomFestival == nom_festival).first()
+    festival = Festival.query.filter(Festival.idFestival == idFestival).first()
 
-    if festival :
-        debut_festival = festival.debutFest
-        fin_festival = festival.finFest
-
-        duree_festival = (fin_festival - debut_festival).days + 1
-
-        jours_dispo = [debut_festival + timedelta(days=i) for i in range(duree_festival)]
-
-        import locale
+    if festival:
         locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
 
-        jours_disponibles_formates = [date.strftime('%A %d %B %H:%M') for date in jours_dispo]
+        dates_festival = [festival.debutFest + timedelta(days=i) for i in range((festival.finFest - festival.debutFest).days + 1)]
 
-        combinaisons_jours = list(combinations(jours_disponibles_formates, 2))
-        combinaisons_successives = [comb for comb in combinaisons_jours if jours_disponibles_formates.index(comb[0]) == jours_disponibles_formates.index(comb[1]) - 1]
-        combinaisons_successives_affcihe = [f"{comb[0]} - {comb[1]}" for comb in combinaisons_successives]
+        dates_festival_formatees = [date.strftime('%A %d %B %Y %H:%M') for date in dates_festival]
 
-        evenements_disponibles = Event.query.filter(Event.idFestival == festival.idFestival).all()
+        combinaisons_jours = list(combinations(dates_festival_formatees, 2))
+        combinaisons_successives = [comb for comb in combinaisons_jours if dates_festival_formatees.index(comb[0]) == dates_festival_formatees.index(comb[1]) - 1]
+        combinaisons_successives_affiche = [f"{comb[0]} - {comb[1]}" for comb in combinaisons_successives]
 
-    return jsonify({'evenements_disponibles': [event.to_json() for event in evenements_disponibles], 'jours_disponibles_formates': jours_disponibles_formates, "combinaisons_successives_affcihe":combinaisons_successives_affcihe})
+        return jsonify({'dates': dates_festival_formatees if nomBillet == "Journée" else combinaisons_successives_affiche if nomBillet == "2 jours" else ""})
 
 @app.route('/evenements_disponibles/<string:date>/', methods=['GET'])
 def evenements_disponibles(date):
@@ -198,8 +211,11 @@ def day_detail(festival_id, day):
 
 from flask import request
 
-@app.route("/reserver/<int:idEvent>/")
+@app.route("/reserver/<int:idEvent>/", methods=['POST'])
 def reserver(idEvent):
+    if current_user.is_authenticated is False:
+        return redirect(url_for('login'))
+    quantite = request.form.to_dict()['quantite']
     event = Event.query.get(idEvent)
     referrer = request.referrer
     if event is None or event.nbPlaceEvent == len(event.reservations) or event.dateHeureFinEvent < datetime.now():
@@ -207,9 +223,51 @@ def reserver(idEvent):
             return redirect(referrer)
         else:
             return redirect(url_for('home'))
-    Reserver.reserver_event(idEvent, current_user.nom)
-    Billet.acheter_billet(current_user.nom, event.idFestival, datetime.now(), event.dateHeureDebutEvent, event.dateHeureFinEvent, 0, 1)
+    Reserver.reserver_event(idEvent, current_user.nom, nbPlaceReserve=quantite)
+    Billet.acheter_billet(current_user.nom, event.idFestival, datetime.now(), event.dateHeureDebutEvent, event.dateHeureFinEvent, 0, quantite)
     flash("Votre réservation a bien été prise en compte", "success")
+    if referrer and request.host in referrer:
+        return redirect(referrer)
+    else:
+        return redirect(url_for('home'))
+
+@app.route("/acheter_billet/", methods=['POST'])
+def acheter_billet():
+    if current_user.is_authenticated is False:
+        return redirect(url_for('login'))
+
+    id_festival = request.form.get('nomFestival')
+    nom_billet = request.form.get('nomBillet')
+    jour_selectionne = request.form.get('selectDate')
+    prix_billet = request.form.get('prix')
+    quantite = request.form.get('quantite')
+    referrer = request.referrer
+    date_format = '%Y-%m-%d %H:%M:%S'  # Format de la base de données
+
+    if nom_billet == "Journée":
+        date_str = jour_selectionne
+        date_obj = datetime.strptime(date_str, "%A %d %B %Y %H:%M").date()
+        Billet.acheter_billet(current_user.nom, id_festival, datetime.now(), date_obj, date_obj, prix_billet, quantite)
+        for event in Event.query.filter(Event.idFestival == id_festival).all():
+            event_date_str = event.dateHeureDebutEvent.strftime(date_format)
+            if datetime.strptime(event_date_str, date_format).date() == date_obj:
+                Reserver.reserver_event(event.idEvent, current_user.nom, nbPlaceReserve=quantite)
+    elif nom_billet == "2 jours":
+        date_str_1 = jour_selectionne.split(" - ")[0]
+        date_obj_1 = datetime.strptime(date_str_1, "%A %d %B %Y %H:%M").date()
+        date_str_2 = jour_selectionne.split(" - ")[1]
+        date_obj_2 = datetime.strptime(date_str_2, "%A %d %B %Y %H:%M").date()
+        Billet.acheter_billet(current_user.nom, id_festival, datetime.now(), date_obj_1, date_obj_2, prix_billet, quantite)
+        for event in Event.query.filter(Event.idFestival == id_festival).all():
+            event_date_str = event.dateHeureDebutEvent.strftime(date_format)
+            if datetime.strptime(event_date_str, date_format).date() == date_obj_1 or datetime.strptime(event_date_str, date_format).date() == date_obj_2:
+                Reserver.reserver_event(event.idEvent, current_user.nom, nbPlaceReserve=quantite)
+    elif nom_billet == "Totalité du festival":
+        Billet.acheter_billet(current_user.nom, id_festival, datetime.now(), Event.query.filter(Event.idFestival == id_festival).with_entities(func.min(Event.dateHeureDebutEvent)).scalar(), Event.query.filter(Event.idFestival == id_festival).with_entities(func.max(Event.dateHeureFinEvent)).scalar(), prix_billet, quantite)
+        for event in Event.query.filter(Event.idFestival == id_festival).all():
+            Reserver.reserver_event(event.idEvent, current_user.nom, nbPlaceReserve=quantite)
+
+    flash("Votre achat a bien été pris en compte", "success")
     if referrer and request.host in referrer:
         return redirect(referrer)
     else:

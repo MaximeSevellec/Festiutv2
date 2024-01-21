@@ -52,14 +52,18 @@
             
             <p><strong>Nombre de place disponible</strong> : {{ event.reservations|lenght }} / {{ event.nbPlaceEvent if event.nbPlaceEvent > 0 else "illimité" }}</p>
             <p><strong>Adresse de l'évènement</strong> : {{ event.adresseEvent }}</p>
-            <p class="gratuitPayant">{{"Évènement Gratuit" if event.estGratuit else "Évènement Payant" }}</p>
+            <form class="gratuitPayant" action="{{ url_for('reserver', idEvent=event.idEvent) }}" method="POST">
+                <button type="submit">Réserver</button>
+                <input type="number" name="quantite" id="quantite" value="1" min="1"  max="{{ event.nbPlaceEvent-event.reservations|lenght if event.nbPlaceEvent > 0 else 10 }}" required>
+            </form>
+            {% endif %}
             {{ event.imageEvent | byte_to_image | safe }}
         </div>
         {% if event.estGratuit %}
         <a class="reserver" href="{{ url_for('reserver', idEvent=event.idEvent) }}">Réserver</a>
         {%else %}
         <p class="indisponnible">Non réservable</p>
-    {% endif %}
+        {% endif %}
     </div>
     
     {% endfor %}
