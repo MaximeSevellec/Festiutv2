@@ -21,10 +21,20 @@
             </div>    
     {% endfor %}
 
+    {% if events_by_day|lenght == 0 %}
+        <p>Aucun programme n'est disponible pour le moment</p>
+    {% endif %}
+    {% if current_user.is_authenticated and current_user.role == 'Admin' %}
+        <a href="{{ url_for('ajouter_evenement', idFestival=festival.idFestival) }}">Ajouter un évènement</p>
+    {% endif %}
+
     <h1>Groupes présents au festival</h1>
     <div class="ensGroupe">
         {% for groupe in groupes %}
             <a class="nomGrp" href="{{ url_for('groupe', nomGroupe=groupe.nomGroupe) }}">{{ groupe.nomGroupe }}</a>
         </div>    
         {% endfor %}
+        {% if current_user.is_authenticated and current_user.role == 'Admin' %}
+        <a href="{{ url_for('ajouter_groupe_festival', idFestival=festival.idFestival) }}">Ajouter un groupe au festival</p>
+    {% endif %}
 {% endblock %}

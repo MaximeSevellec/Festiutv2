@@ -6,6 +6,7 @@
 <h2>Les évènements qui n'ont pas de groupe</h2>
 
 {% for event in events %}
+    <p>Assigné au festival : {{ event.festival.nomFestival }}</p>
     <p>{{ event.nomEvent }}</p>
     <p>{{ event.typeEvent }}</p>
     <p>{{ event.dateHeureDebutEvent }}</p>
