@@ -60,22 +60,23 @@
     text-underline-offset: 20%;
 }
 
-#groupes>h1{
+.festival:hover{
+    background-color: rgba(255, 0, 0, 0.3);
+}
+
+.fest, .grp{
+    width: 100%;
+}
+
+#titreGroupe{
     padding-bottom: 1%;
     text-decoration:2px underline;
     text-underline-offset: 25%;
-}
-
-#groupes{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 1em;
     text-align: center;
 }
 
 #groupes{
-    flex-wrap: wrap;
+    display: flex;
 }
 
 .groupe{
@@ -85,16 +86,9 @@
     padding: 1em;
     box-shadow: 0 0.2em 0.4em rgba(0, 0, 0, 0.3);
     border-radius: 0.4em;
-    cursor: pointer;
 }
 
-.festival:hover{
-    background-color: rgba(255, 0, 0, 0.3);
-}
 
-.fest, .grp{
-    width: 100%;
-}
 
 .image{
     display: block;

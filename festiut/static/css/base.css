@@ -57,9 +57,8 @@
 }
 
 footer{
-    position: fixed;
     bottom: 0%;
-    width: 100%;
+    width: auto;
     text-align: center;
     padding: 0.2em;
     padding-bottom: 0.5em;
@@ -75,5 +74,4 @@ footer>p{
     font-size: 110%;
     display: flex;
     padding-top: 1%;
-    
 }

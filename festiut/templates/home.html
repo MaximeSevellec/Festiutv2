@@ -26,16 +26,15 @@
         </div>
     {% endfor %}
 </div>
+<h1 id="titreGroupe">Quelques groupes présents</h1>
 <div id="groupes">
-    <h1>Quelques groupes présents</h1>
     {% for groupe in groupes %}
-        <div class="groupe">
-            <a class="grp" href="{{ url_for('groupe', nomGroupe=groupe.nomGroupe) }}">
-                {{ groupe.imageGroupe | byte_to_image | safe }}
-                <p>{{ groupe.nomGroupe }}</p>
-                + de détails
-            </a>
-        </div>
+    <div class="groupe">
+            {{ groupe.imageGroupe | byte_to_image | safe }}
+            <p>{{ groupe.nomGroupe }}</p>
+            <a class="grp" href="{{ url_for('groupe', nomGroupe=groupe.nomGroupe) }}">+ de détails</a>
+        </a>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}
