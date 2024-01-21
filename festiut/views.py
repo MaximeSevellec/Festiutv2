@@ -85,7 +85,9 @@ def home():
 def groupe(nomGroupe):
     groupe = Groupe.query.get(nomGroupe)
     artistes = Artiste.query.join(Groupe).filter(Groupe.nomGroupe == nomGroupe).all()
-    return render_template("groupe.html", groupe=groupe, artistes=artistes)
+    event_participer = Event.query.filter(Event.nom_groupe == nomGroupe).all()
+    print(event_participer)
+    return render_template("groupe.html", groupe=groupe, artistes=artistes, event_participer=event_participer)
 
 @app.route("/artiste/<string:nomArtiste>/")
 def artiste(nomArtiste):

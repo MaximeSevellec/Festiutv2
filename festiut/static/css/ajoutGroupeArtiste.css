@@ -1,55 +1,58 @@
-.parent{
-    display: flex;
-    align-items: center;
-}
-
-.artiste{
-    margin-top: 2%;
-    margin-bottom: 2%;
-}
-
-.artiste>h2{
-    text-align: center;
-}
-
-
-#formulaire-artiste {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-input[type="text"], select, input[type="file"] {
-    width: 100%;
-    padding: 2%;
-    margin: 2% 0;
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
-button {
-    background-color: #ccc;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h2 {
     color: #333;
-    padding: 4%;
-    cursor: pointer;
-    border: none;
+    margin-bottom: 20px;
 }
 
-button:hover {
-    background-color: #ddd;
+p {
+    color: #555;
+    margin-bottom: 10px;
 }
 
-button[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    padding: 4%;
-    cursor: pointer;
-    border: none;
+a {
+    color: #007bff;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-button[type="submit"]:hover {
-    background-color: #45a049;
+a:hover {
+    background-color: #007bff;
+    color: #fff;
 }
 
-.groupe>h2{
-    text-align: center;
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center; /* Ajout pour centrer le texte */
 }
+
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center; /* Ajout pour centrer le texte */
+}
+
+

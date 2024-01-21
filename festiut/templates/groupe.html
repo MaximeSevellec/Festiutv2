@@ -8,13 +8,20 @@
 {{ groupe.imageGroupe | byte_to_image | safe }}
 <p>{{ groupe.nomGroupe }}</p>
 
-<!-- Rajouter le style du groupe en récupérant l'entièreté des styles des artistes-->
-
 {% for artiste in artistes %}
     <a href="{{ url_for('artiste', nomArtiste=artiste.nomArtiste) }}">
         <p>{{ artiste.nomArtiste }}</p>
         {{ artiste.imageArtiste | byte_to_image | safe }}
     </a>
+<div class="event"> 
+    {% for event in event_participer %}
+        {% if event.nomArtiste == artiste.nomArtiste %}
+            <p>{{ event.nomFestival }}</p>
+            <p>{{ event.nomScene }}</p>
+            <p>{{ event.dateEvent | datetime }}</p>
+        {% endif %}
+    {% endfor %}    
+</div>
 {% endfor %}
 
 {% endblock %}

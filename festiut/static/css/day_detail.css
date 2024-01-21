@@ -1,124 +1,90 @@
-h1,h2{
-    padding-left: 1.5%;
+/* day_detail.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
 }
 
-.day{
-    padding-left: 1.5%;
-    text-decoration: none;
-    color: #2874A6;
+h1, h2 {
+    color: #333;
+}
+
+.acheterBillet {
     display: inline-block;
-    font-size: 110%;
-    font-weight: bold;
-    transition: color 0.3s, transform 0.3s;
+    margin: 10px 0;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
 }
 
-.day:hover{
-    color: #3498DB;
-    transform: scale(1.2);
+.acheterBillet:hover {
+    background-color: #45a049;
 }
 
-.affichageDetail{
+.days-container {
     display: flex;
+    margin: 20px 0;
 }
 
-.info{
-    padding-left: 1.5%;
-    font-size: 120%;
-    color:#922B21 ;
-    text-decoration: underline;
-    text-underline-offset: 20%;
-    font-weight: bold;
+.day {
+    margin-right: 10px;
+    padding: 8px 12px;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.day:hover {
+    background-color: #2980b9;
+}
+
+.affichageDetail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .event {
-    background-color: white;
-    display: flex;
-    flex-wrap: wrap;
-    height: 50vh;
-    width: 25vw;
-    flex-grow: 0; /* empêche la div de s'étendre au-delà de sa taille naturelle */
-    margin: 2%;
-    padding: 0%;
-    box-shadow: 0 0.2em 0.4em rgba(0, 0, 0, 0.3);
-    border-radius: 2%;
-    opacity: 1;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    width: 300px;
 }
 
-strong{
-    text-decoration: underline;
+.evt {
+    cursor: pointer;
 }
 
-.event:hover .evt{
-    opacity: 1;
+.event p {
+    margin: 5px 0;
 }
 
-.evt{
-    width: 100%;
-    height: 100%;
-    margin: 2%;
-    border-radius: 2%;
-    background-color: #1a1a1a;
-    color: white;
-    opacity: 0;
-    transition: opacity 0.3s;
+.gratuitPayant {
+    color: #3498db;
+}
+
+.reserver {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #3498db;
+    color: #fff;
     text-decoration: none;
+    border-radius: 5px;
 }
 
-.evt>p{
-    padding: 1%;
+.reserver:hover {
+    background-color: #2980b9;
 }
 
-.gratuitPayant{
+.indisponnible {
+    color: #d9534f;
     font-weight: bold;
-}
-
-.reserver{
-    margin-top: 1%;
-    display: inline-block;
-    font-size: 130%;
-    color: navy;
-    text-decoration: thin;
-    text-underline-offset: 20%;
-    transition: color 0.3s, transform 0.3s, text-decoration 0.3s,text-underline-offset 0.3s;
-}
-
-.reserver:hover{
-    color: blue;
-    transform: scale(1.2);
-    text-decoration: underline;
-    text-underline-offset: 30%;
-}
-
-.acheterBillet{
-    display: inline-block;
-    font-size: 120%;
-    padding-left: 1.5%;
-    color: navy;
-    text-decoration: thin;
-    text-underline-offset: 10%;
-    transition: color 0.3s, transform 0.3s, text-decoration 0.3s,text-underline-offset 0.3s;
-}
-
-.acheterBillet:hover{
-    color: blue;
-    transform: scale(1.1);
-    text-decoration: underline;
-    text-underline-offset: 20%;
-}
-
-.indisponnible{
-    margin-top: 1%;
-    display: inline-block;
-    font-size: 120%;
-    color: gray;
-    text-decoration: thin;
-    text-underline-offset: 20%;
-    transition: color 0.3s,transform 0.3s,text-decoration 0.3s,text-underline-offset 0.3s;
-}
-
-.indisponnible:hover{
-    color: #8d8d8d;
-    transform: scale(1.2);
-    text-decoration: underline;
-    text-underline-offset: 30%;
 }

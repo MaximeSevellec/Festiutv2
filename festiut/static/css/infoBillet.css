@@ -1,0 +1,108 @@
+/* Ajoutez ces styles à votre feuille de style principale ou créez une feuille de style séparée (par exemple, acheter_billet.css) */
+
+/* Reset CSS */
+body, h1, h2, p, select, input, form {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+}
+
+form {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+p {
+    color: #555;
+    margin-bottom: 10px;
+}
+
+select, input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.select-container {
+    position: relative;
+}
+
+.select-container:after {
+    content: '\25BC';
+    font-size: 18px;
+    color: #555;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+#test {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: url('path/to/your-arrow-icon.png') no-repeat right center;
+    background-size: 20px;
+    cursor: pointer;
+}
+
+#error {
+    color: #d9534f;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#events {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.event {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    width: 100%;
+}
+
+.evt {
+    cursor: pointer;
+}
+
+.event p {
+    margin: 5px 0;
+}
+
+.valider {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.valider:hover {
+    background-color: #45a049;
+}

@@ -3,8 +3,9 @@
     {{ super() }}
 {% endblock %}
 {% block main %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ajouterFestival.css') }}">
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<h2>Ajouter un Festival</h2>
+<h2>Ajouter un Festival</h2>    
 <p id="message-festival"></p>
 <form id="formulaire-festival" action="" enctype="multipart/form-data">
 

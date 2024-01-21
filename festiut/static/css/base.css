@@ -1,18 +1,23 @@
 * {
-    margin: auto;
-    padding: auto;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 #header {
     padding: 1em;
     background-color: #ffffff;
-    padding-left: 0%;
-    padding-right: 0%;
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: 2px solid #ccc; /* Ajout d'une bordure en bas */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ajout d'une ombre */
+    border-bottom: 2px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #navbar {
@@ -20,16 +25,35 @@
     justify-content: space-between;
 }
 
-.left {
-    flex-grow: 1;
+.left ul {
+    list-style-type: none;
     display: flex;
-    margin-right: 20%;
-    margin-left: 3%;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.left li {
+    margin-right: 20px;
+}
+
+.left a {
+    text-decoration: none;
+    color: black;
+    font-size: 130%;
+    transition: transform 0.3s, text-decoration 0.3s, text-underline-offset 0.3s;
+}
+
+.left a:hover {
+    transform: scale(1.3);
+    text-decoration: underline;
+    text-underline-offset: 30%;
 }
 
 .logo, .lien {
     margin: 2%;
     font-size: 130%;
+    margin-bottom: 1%;
     text-decoration: none;
     color: black;
     transition: transform 0.3s, text-decoration 0.3s, text-underline-offset 0.3s;
@@ -52,36 +76,35 @@
     transition: transform 0.3s;
 }
 
-.user:hover{
+.user:hover {
     transform: scale(1.4);
 }
 
-footer{
-    bottom: 0%;
-    width: auto;
+footer {
+    margin-top: auto;
+    width: 100%;
     text-align: center;
     padding: 0.2em;
-    padding-bottom: 0.5em;
     background-color: #f6f6f6;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3); /* Ajout d'une ombre */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-footer>p{
+footer > ul {
+    justify-content: space-around;
+    display: flex;
+    margin-bottom: 5vh;
+    list-style: none;
+    margin-top: 1%;
+}
+
+footer > p {
     color: rgb(122, 122, 122);
 }
 
-.grid{
+.grid {
     font-size: 110%;
     display: flex;
     padding-top: 1%;
-}
-
-.success{
-    color: green;
-}
-
-.error{
-    color: red;
 }
 
 #flash-messages {
@@ -102,32 +125,7 @@ footer>p{
     text-align: center;
 }
 
-.success{
-    color: green;
-}
-
-.error{
-    color: red;
-}
-
-.menuDeroulant {
-    padding: 1%;
-    position: relative;
-    margin-bottom:0% ;
-    font-size: 100%;
-    border: 0.2em solid #ccc;
-    border-radius: 2%;
-    cursor: pointer;
-    margin-left: 2%;
-}
-
-/* Style des options dans le menu déroulant */
 option {
     background-color: #fff;
     color: #333;
-}
-
-/* Style lorsque le menu déroulant est survolé */
-select:hover {
-    border-color: #666;
 }
