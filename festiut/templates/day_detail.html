@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block styles %}
-    {{ super() }}
+{{ super() }}
 {% endblock %}
 {% block scripts %}
 <script>
@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block main %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/festival.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/day_detail.css')}}">
 
     <h1>{{ festival.nomFestival }}</h1>
 
@@ -37,23 +37,27 @@
     <div class="days-container">
         {% for event_day in events_by_day %}
             {% if event_day != day %}
-                <a href="{{ url_for('day_detail', festival_id=festival.idFestival, day=event_day.strftime('%Y-%m-%d')) }}" class="day-link">{{ event_day.strftime('%Y-%m-%d') }}</a>
+                <a class="day" href="{{ url_for('day_detail', festival_id=festival.idFestival, day=event_day.strftime('%Y-%m-%d')) }}" class="day-link">{{ event_day.strftime('%Y-%m-%d') }}</a>
             {% endif %}
         {% endfor %}
     </div>
-    
-    {% for event in events_for_day %}
-    <div class="event">
-        <a class="evt" href="#">
-            <p>{{ event.nomEvent }}</p>
-            <p>{{ event.typeEvent }}</p>
-            <p>{{ event.dateHeureDebutEvent | datetime_format }} - {{ event.dateHeureFinEvent | datetime_format('%Hh:%M') }}</p>
-            <p>{{ "Gratuit" if event.estGratuit else "" }}</p>
-            <p>{{ event.adresseEvent }}</p>
-            <p>{{ event.nbPlaceEvent }}</p>
-            <p>{{ event.imageEvent }}</p>
-        </a>
-    </div>
-    
-    {% endfor %}
+    <p class="info">Passez la souris sur les images pour plus d'informations</p>
+    <div class="affichageDetail">
+        {% for event in events_for_day %}
+            <div class="event">
+                {% if event.imageEvent %}
+                    <img class="imgProg" src="{{ event.imageEvent}}" alt="image du programme">
+                {% endif %}
+                <div class="evt" href="#">
+                    <p><strong>Nom de l'évènement : </strong>{{ event.nomEvent }}</p>
+                    <p><strong>Le type d'évènement : </strong>{{ event.typeEvent }}</p>
+                    <p><strong>Durée de l'évènement : </strong>{{ event.dateHeureDebutEvent | datetime_format('%Hh:%M') }} - {{ event.dateHeureFinEvent | datetime_format('%Hh:%M') }}</p>
+                    <p class="gratuitPayant">{{"Évènement Gratuit" if event.estGratuit else "Évènement Payant" }}</p>
+                    <p><strong>Adresse de l'évènement : </strong>{{ event.adresseEvent }}</p>
+                    <p><strong>Nombre de place : </strong>{{ event.nbPlaceEvent }}</p>
+                    <p>{{ "" if event.imageEvent == None else event.imageEvent }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>   
 {% endblock %}
