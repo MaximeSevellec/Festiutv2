@@ -53,8 +53,8 @@ def loaddb():
 
     # Insertion des artistes
     db.session.add_all([
-        Artiste(nomArtiste="M. Soleil", nomGroupe="La pluie", styleArtiste="Rap", urlInstaArtiste="https://www.instagram.com/msoleil/", urlYoutubeArtiste="https://www.youtube.com/channel/UCZpX9r7l2Z5Xf5VwXW8kD3g"),
-        Artiste(nomArtiste="M. Pluie", nomGroupe="La pluie", styleArtiste="Rap Pop", urlInstaArtiste="https://www.instagram.com/mpluie/", urlYoutubeArtiste="https://www.youtube.com/channel/UCZpX9r7l2Z5Xf5VwXW8kD3g"),
-        Artiste(nomArtiste="M. Orage", nomGroupe="L'orage", styleArtiste="Classique", urlInstaArtiste="https://www.instagram.com/morage/", urlYoutubeArtiste="https://www.youtube.com/channel/UCZpX9r7l2Z5Xf5VwXW8kD3g")
+        Artiste(nomArtiste="M. Soleil", nomGroupe="La pluie", styleArtiste="Rap", urlInstaArtiste="https://", urlYoutubeArtiste="https://"),
+        Artiste(nomArtiste="M. Pluie", nomGroupe="La pluie", styleArtiste="Rap Pop", urlInstaArtiste="https://", urlYoutubeArtiste="https:/"),
+        Artiste(nomArtiste="M. Orage", nomGroupe="L'orage", styleArtiste="Classique", urlInstaArtiste="https://w", urlYoutubeArtiste="https:/")
     ])
     db.session.commit()

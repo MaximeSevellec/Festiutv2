@@ -36,7 +36,7 @@ class RegisterForm(FlaskForm):
         m = sha256()
         m.update(self.password.data.encode())
         passwd = m.hexdigest()
-        user = Utilisateur(nom=self.nom.data, password=passwd, monRole="Utilisateur")
+        user = Utilisateur(nom=self.nom.data, password=passwd, role ="Utilisateur")
         save_user(user)
         return user
     

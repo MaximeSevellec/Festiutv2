@@ -55,7 +55,6 @@
                 <button type="submit">Réserver</button>
                 <input type="number" name="quantite" id="quantite" value="1" min="1"  max="{{ event.nbPlaceEvent-event.reservations|lenght if event.nbPlaceEvent > 0 else 10 }}" required>
             </form>
-            {% endif %}
             {{ event.imageEvent | byte_to_image | safe }}
         </div>
         {% if event.estGratuit %}
