@@ -47,6 +47,21 @@ class Event(db.Model):
     imageEvent = db.Column(db.LargeBinary(length=(2**32)-1), nullable=True)
 
     reservations = db.relationship('Reserver', backref='event', lazy=True)
+    
+    def to_json(self):
+        return {
+            'idEvent': self.idEvent,
+            'idFestival': self.idFestival,
+            'nomEvent': self.nomEvent,
+            'typeEvent': self.typeEvent,
+            'dateHeureDebutEvent': self.dateHeureDebutEvent,
+            'dateHeureFinEvent': self.dateHeureFinEvent,
+            'estGratuit': self.estGratuit,
+            'adresseEvent': self.adresseEvent,
+            'nbPlaceEvent': self.nbPlaceEvent,
+            'nom_groupe': self.nom_groupe,
+            'imageEvent': self.imageEvent
+        }
 
     def ajouter_nouveau_event(idFestival, nomEvent, typeEvent, dateHeureDebutEvent, dateHeureFinEvent, estGratuit, adresseEvent, nbPlaceEvent, nom_groupe, imageEvent):
         

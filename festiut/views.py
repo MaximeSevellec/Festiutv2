@@ -1,6 +1,7 @@
+from itertools import combinations
 from markupsafe import Markup
 from .app import app, login_manager
-from flask import render_template,request, redirect, url_for, jsonify
+from flask import render_template,request, redirect, url_for, jsonify, flash
 from .models import *
 from hashlib import sha256
 from flask_login import login_user, current_user, logout_user
@@ -86,21 +87,23 @@ def groupe(nomGroupe):
     artistes = Artiste.query.join(Groupe).filter(Groupe.nomGroupe == nomGroupe).all()
     return render_template("groupe.html", groupe=groupe, artistes=artistes)
 
-@app.route("/event/<string:nomArtiste>/")
+@app.route("/artiste/<string:nomArtiste>/")
 def artiste(nomArtiste):
     artiste = Artiste.query.get(nomArtiste)
     return render_template("artiste.html", artiste=artiste)
 
-@app.route("/billeterie/")
-def billeterie():
+@app.route("/billeterie/<int:idFestival>/")
+@app.route("/billeterie/", defaults={'idFestival': 0})
+def billeterie(idFestival):
+    festival = Festival.query.get(idFestival)
     billet_jour = {"Journée" : "20€", "2 jours" : "35", "Totalité du festival" : "50€"}
-        
-        
-    return render_template("billeterie.html", billet_jour=billet_jour)
+    return render_template("billeterie.html", billet_jour=billet_jour, festival=festival)
 
-@app.route("/info_billet/<string:nomBillet>/")
-def info_billet(nomBillet):
-    festival = Festival.query.get(1)   
+@app.route("/info_billet/<string:nomBillet>/<int:idFestival>")
+@app.route("/info_billet/<string:nomBillet>/", defaults={'idFestival': 0})
+def info_billet(nomBillet, idFestival):
+    festival = Festival.query.get(idFestival)
+    festivals = Festival.query.all()
     if festival:
 
         debut_festival = festival.debutFest
@@ -109,9 +112,59 @@ def info_billet(nomBillet):
         duree_festival = (fin_festival - debut_festival).days + 1
 
         jours_dispo = [debut_festival + timedelta(days=i) for i in range(duree_festival)]
-        print(jours_dispo)
 
-    return render_template("info_billet.html",nomBillet=nomBillet, jours_dispo=jours_dispo )
+        import locale
+        locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+
+        jours_disponibles_formates = [date.strftime('%A %d %B %H:%M') for date in jours_dispo]
+
+        combinaisons_jours = list(combinations(jours_disponibles_formates, 2))
+        combinaisons_successives = [comb for comb in combinaisons_jours if jours_disponibles_formates.index(comb[0]) == jours_disponibles_formates.index(comb[1]) - 1]
+        combinaisons_successives_affcihe = [f"{comb[0]} - {comb[1]}" for comb in combinaisons_successives]
+
+        evenements_disponibles = Event.query.filter(Event.idFestival == festival.idFestival).all()
+
+    else:
+        jours_dispo = []
+        combinaisons_successives_affcihe = []
+        evenements_disponibles = []
+
+    return render_template("info_billet.html", festival=festival, festivals=festivals, nomBillet=nomBillet, jours_dispo=jours_dispo, combinaisons_successives_affcihe=combinaisons_successives_affcihe, evenements_disponibles=evenements_disponibles )
+
+@app.route('/get_dates', methods=['POST'])
+def get_dates():
+    nom_festival = request.form.to_dict()['nom_festival']
+
+    festival = Festival.query.filter(Festival.nomFestival == nom_festival).first()
+
+    if festival :
+        debut_festival = festival.debutFest
+        fin_festival = festival.finFest
+
+        duree_festival = (fin_festival - debut_festival).days + 1
+
+        jours_dispo = [debut_festival + timedelta(days=i) for i in range(duree_festival)]
+
+        import locale
+        locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+
+        jours_disponibles_formates = [date.strftime('%A %d %B %H:%M') for date in jours_dispo]
+
+        combinaisons_jours = list(combinations(jours_disponibles_formates, 2))
+        combinaisons_successives = [comb for comb in combinaisons_jours if jours_disponibles_formates.index(comb[0]) == jours_disponibles_formates.index(comb[1]) - 1]
+        combinaisons_successives_affcihe = [f"{comb[0]} - {comb[1]}" for comb in combinaisons_successives]
+
+        evenements_disponibles = Event.query.filter(Event.idFestival == festival.idFestival).all()
+
+    return jsonify({'evenements_disponibles': [event.to_json() for event in evenements_disponibles], 'jours_disponibles_formates': jours_disponibles_formates, "combinaisons_successives_affcihe":combinaisons_successives_affcihe})
+
+@app.route('/evenements_disponibles/<string:date>/', methods=['GET'])
+def evenements_disponibles(date):
+    event = Event.query.filter(Event.dateHeureDebutEvent == date).all()
+    evenements = []
+    for e in event:
+        evenements.append(e.nomEvent)
+    return jsonify({'evenements': evenements})
 
 @app.template_filter('datetime_format')
 def datetime_format(value, format='%A %d %B à %Hh%M'):
@@ -183,6 +236,7 @@ def login():
         user = f.get_authenticated_user()
         if user:
             login_user(user)
+            flash ("Bon retour parmis nous " + user.nom, "success")
             return redirect(url_for("home"))
     return render_template("login.html", form=f)
 
@@ -193,6 +247,7 @@ def register():
         user = f.get_register_user()
         if user:
             login_user(user)
+            flash ("Bienvenue parmis nous " + user.nom, "success")
             return redirect(url_for("home"))
     return render_template("register.html", form=f)
 

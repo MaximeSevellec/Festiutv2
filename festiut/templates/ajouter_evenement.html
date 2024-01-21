@@ -18,7 +18,7 @@
     <select name="nomFestival" id="nomFestival" required>
         <option value="" disabled selected hidden>Choisissez un Festival</option>
         {% for festival in festivals %}
-            {% if nomFestival is not none %}
+            {% if nomFestival is not none and festival.nomFestival == nomFestival %}
                 <option value="{{ festival.nomFestival }}" selected>{{ festival.nomFestival }}</option>
             {% else %}
                 <option value="{{ festival.nomFestival }}">{{ festival.nomFestival }}</option>
