@@ -1,0 +1,16 @@
+<!-- HTML -->
+{% extends 'base.html' %}
+{% block main %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/billeterie.css') }}">
+<div class="placementBillet">
+    {% for nom_billet, prix_billet in billet_jour.items() %}
+        <div class="billet">
+            <div class="div_img">
+                <a href="{{ url_for('info_billet', nomBillet=nom_billet) }}">
+                    <img class="img_acc" src="{{ url_for('static', filename='image/' + nom_billet + '.png') }}" alt="img">
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

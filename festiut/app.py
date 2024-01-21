@@ -12,5 +12,6 @@ login_manager = LoginManager(app)
 app.config['BOOTSTRAP_SERVE_LOCAL'] = True
 app.config['SECRET_KEY'] = '3b6be466-1cd7-47cc-9a61-689735e10610'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost:3306/festiut'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://sevellec:sevellec@localhost:3306/festiut'
 
 db = SQLAlchemy(app)

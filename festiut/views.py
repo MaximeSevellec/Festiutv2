@@ -11,6 +11,7 @@ from sqlalchemy.sql.expression import func
 import locale
 import base64
 import copy
+from sqlalchemy.orm import joinedload
 
 class LoginForm(FlaskForm):
     nom = StringField('Nom')
@@ -37,7 +38,7 @@ class RegisterForm(FlaskForm):
         user = Utilisateur(nom=self.nom.data, password=passwd, monRole="Utilisateur")
         save_user(user)
         return user
-
+    
 @login_manager.user_loader
 def load_user(nom):
     return Utilisateur.query.get(nom)
@@ -71,35 +72,49 @@ def home():
         
         festivals.append(festival_temp)
 
-        groupes_festival = Groupe.query.select_from(Event).filter(Event.idFestival == festival.idFestival).all()
         if len(groupes) <= 5:
+            groupes_festival = Groupe.query.join(Event, Groupe.nomGroupe == Event.nom_groupe).filter(Event.idFestival == festival.idFestival).all()
             groupes.extend(groupes_festival)
     return render_template("home.html", festivals=festivals, groupes=groupes)
-
-@app.route("/festival/<int:idFestival>/")
-def festival(idFestival):
-    festival = Festival.query.get(idFestival)
-    events = Event.query.filter(Event.idFestival == idFestival).order_by(Event.dateHeureDebutEvent).all()
-    groupes = Groupe.query.select_from(Event).filter(Event.idFestival == idFestival).all()
-
-    events_by_day = {}
-    for event in events:
-        day = event.dateHeureDebutEvent.date()
-        if day not in events_by_day:
-            events_by_day[day] = []
-        events_by_day[day].append(event)
-    return render_template("festival.html", festival=festival, events=events, groupes=groupes, events_by_day=events_by_day)
 
 @app.route("/groupe/<string:nomGroupe>/")
 def groupe(nomGroupe):
     groupe = Groupe.query.get(nomGroupe)
-    artistes = Artiste.query.select_from(Groupe).filter(Groupe.nomGroupe == nomGroupe).all()
+    artistes = Artiste.query.join(Groupe).filter(Groupe.nomGroupe == nomGroupe).all()
     return render_template("groupe.html", groupe=groupe, artistes=artistes)
 
 @app.route("/event/<string:nomArtiste>/")
 def artiste(nomArtiste):
     artiste = Artiste.query.get(nomArtiste)
     return render_template("artiste.html", artiste=artiste)
+
+@app.route("/billeterie/")
+def billeterie():
+    billet_jour = {"Journée" : "20€", "2 jours" : "35", "Totalité du festival" : "50€"}
+        
+        
+    return render_template("billeterie.html", billet_jour=billet_jour)
+
+@app.route("/info_billet/<string:nomBillet>/")
+def info_billet(nomBillet):
+    festival = Festival.query.get(1)    
+    idFestival = festival.idFestival
+    if festival:
+
+        debut_festival = festival.debutFest
+        fin_festival = festival.finFest
+
+        duree_festival = (fin_festival - debut_festival).days + 1
+
+        jours_dispo = [debut_festival + timedelta(days=i) for i in range(duree_festival)]
+        print(jours_dispo)
+
+    return render_template("info_billet.html",nomBillet=nomBillet, jours_dispo=jours_dispo )
+
+@app.template_filter('datetime_format')
+def datetime_format(value, format='%A %d %B à %Hh%M'):
+    return value.strftime(format) if value else ''
+
 
 app.route("/programme/<int:idFestival>/<dateHeureDebutEvent>/")
 def programme(idFestival, dateHeureDebutEvent):
@@ -207,6 +222,9 @@ def ajouter_nouveau_artiste():
     urlInstaArtiste = data['urlInstaArtiste'] if 'urlInstaArtiste' in data.keys() else None
     urlYoutubeArtiste = data['urlYoutubeArtiste'] if 'urlYoutubeArtiste' in data.keys() else None
 
+    if nomArtiste is None or styleArtiste is None or urlInstaArtiste is None or urlYoutubeArtiste is None:
+        return jsonify({'success': False, 'message': "Le nom de l'artiste ou le style n'est pas renseigné"})
+
     if nomGroupe is None:
         nomGroupe = Groupe.ajouter_nouveau_groupe(nomGroupe=nomArtiste, imageGroupe=None).nomGroupe
         print(nomGroupe)
@@ -225,7 +243,62 @@ def ajouter_nouveau_groupe():
     if fichier:
         byte = fichier.read()
 
-    if Groupe.ajouter_nouveau_groupe(nomGroupe=data['nomGroupe'], imageGroupe=byte) is not None:
+    groupe = data['nomGroupe'] if 'nomGroupe' in data.keys() else None
+
+    if groupe is None:
+        return jsonify({'success': False, 'message': "Le nom du groupe n'est pas renseigné"})
+
+    if Groupe.ajouter_nouveau_groupe(nomGroupe=groupe, imageGroupe=byte) is not None:
         return jsonify({'success': True})
 
     return jsonify({'success': False, 'message': "Le groupe est déjà dans la base de données"})
+
+@app.route("/festival/<int:idFestival>/")
+def festival(idFestival):
+    festival = Festival.query.get(idFestival)
+    events = Event.query.filter(Event.idFestival == idFestival).order_by(Event.dateHeureDebutEvent).all()
+    groupes = Groupe.query.join(Event, Groupe.nomGroupe == Event.nom_groupe).filter(Event.idFestival == idFestival).all()
+
+    events_by_day = {}
+    for event in events:
+        day = event.dateHeureDebutEvent.date()
+        if day not in events_by_day:
+            events_by_day[day] = []
+        events_by_day[day].append(event)
+    return render_template("festival.html", festival=festival, events=events, groupes=groupes, events_by_day=events_by_day)
+
+@app.route("/ajouter_festival/")
+def ajouter_festival():
+    if not current_user.is_authenticated or current_user.role != "Admin":
+        return redirect(url_for("home"))
+    return render_template("ajouter_festival.html")
+
+@app.route("/ajouter_nouveau_festival", methods=['POST'])
+def ajouter_nouveau_festival():
+    data = request.form.to_dict()
+    fichier = request.files['imageFestival']
+
+    byte = None
+    if fichier:
+        byte = fichier.read()
+
+    nomFestival = data['nomFestival'] if 'nomFestival' in data.keys() else None
+    villeFestival = data['villeFestival'] if 'villeFestival' in data.keys() else None
+    codePostalFestival = data['codePostalFestival'] if 'codePostalFestival' in data.keys() else None
+    debutFest = data['debutFest'] if 'debutFest' in data.keys() else None
+    finFest = data['finFest'] if 'finFest' in data.keys() else None
+
+    if nomFestival is None or villeFestival is None or codePostalFestival is None or debutFest is None or finFest is None:
+        return jsonify({'success': False, 'message': "Le nom du festival, la ville, le code postal, la date de début ou la date de fin n'est pas renseignés"})
+
+    if Festival.ajouter_nouveau_festival(nomFestival=nomFestival, villeFestival=villeFestival, codePostalFestival=codePostalFestival, debutFest=debutFest, finFest=finFest, imageFestival=byte) is not None:
+        return jsonify({'success': True})
+
+    return jsonify({'success': False, 'message': "Le festival est déjà dans la base de données"})
+
+@app.route("/voir_festivals/")
+def voir_festivals():
+    if not current_user.is_authenticated or current_user.role != "Admin":
+        return redirect(url_for("home"))
+    festivals = Festival.query.order_by(Festival.debutFest).all()
+    return render_template("voir_festivals.html", festivals=festivals)
