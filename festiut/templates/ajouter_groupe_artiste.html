@@ -37,7 +37,7 @@
     <p>Image du groupe : </p>
     <input type="file" name="imageGroupe" id="imageGroupe" accept="image/png, image/jpeg, image/jpg">
 
-    <button type="submit">Ajouter le groupe</button>
+    <button type="submit" onclick="envoyerFormulaireGroupe()">Ajouter le groupe</button>
 </form>
 <script src="{{ url_for('static', filename='js/formulaire_listener.js') }}"></script>
 <script src="{{ url_for('static', filename='js/formulaire_ajax.js') }}"></script>
