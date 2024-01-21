@@ -18,10 +18,8 @@
                 <div class="right">
                     {% if current_user.is_authenticated %}
                         {% if current_user.role == 'Admin' %}
-                            <a href="{{ url_for('ajouter_groupe_artiste') }}">Ajouter un Artiste/Groupe</a>
-                            <a href="{{ url_for('ajouter_festival') }}">Ajouter un festival</a>
-                            <a href="{{ url_for('voir_festivals') }}">Voir tous les festivals</a>
-                            <a href="{{ url_for('ajouter_evenement') }}">Ajouter un évènement</a>
+                            <a href="{{ url_for('ajouter_groupe_artiste') }}">Créer un nouveau Artiste/Groupe</a>
+                            <a href="{{ url_for('ajouter_festival') }}">Créer un nouveau festival</a>
                             <a href="{{ url_for('assigner_groupe_event_sans_groupe') }}">Assigner un groupe aux évènement sans groupe</a>
                         {% endif %}
                         <a href="{{ url_for('logout') }}"><img class="user" src="{{ url_for('static', filename='image/logout.png') }}"></a>
