@@ -156,7 +156,7 @@ def get_dates():
 
         evenements_disponibles = Event.query.filter(Event.idFestival == festival.idFestival).all()
 
-    return jsonify({'jours_disponibles_formates': jours_disponibles_formates, "combinaisons_successives_affcihe":combinaisons_successives_affcihe})
+    return jsonify({'evenements_disponibles': [event.to_json() for event in evenements_disponibles], 'jours_disponibles_formates': jours_disponibles_formates, "combinaisons_successives_affcihe":combinaisons_successives_affcihe})
 
 @app.route('/evenements_disponibles/<string:date>/', methods=['GET'])
 def evenements_disponibles(date):

@@ -20,9 +20,40 @@
                 {% endfor %}
             </select>
             <div>
+                <p>Voici les journées/évènements disponibles : </p>
                 <select id="test">
-
+                    {% if festival.idFestival is not none %}
+                        {% if nomBillet == 'Journée' and jours_dispo|lenght > 0 %}
+                            {% for jour in jours_dispo %}
+                                <option value="{{ jour }}" data-jour="{{ jour }}">{{ jour | datetime }}</option>
+                            {% endfor %}
+                        {% elif nomBillet == '2 jours' and combinaisons_successives_affcihe|lenght > 0 %}
+                            {% for jour in combinaisons_successives_affcihe %}
+                                <option value="{{ jour }}" data-jour="{{ jour }}">{{ jour }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
                 </select>
+                <p id="error">
+                    {% if nomBillet == 'Totalité du festival' and evenements_disponibles|lenght == 0 %}
+                        Il n'y a pas d'évènements disponibles pour ce festival
+                    {% endif %}
+                </p>
+                <div id="events"> 
+                    {% if nomBillet == 'Totalité du festival' and evenements_disponibles|lenght > 0 %}
+                        {% for event in evenements_disponibles %}
+                            <div class="event">
+                                <a class="evt" href="#">
+                                    <p>{{ event.nomEvent }}</p>
+                                    <p>{{ event.typeEvent }}</p>
+                                    <p>{{ event.dateHeureDebutEvent | datetime_format }} - {{ event.dateHeureFinEvent | datetime_format('%Hh:%M') }}</p>
+                                    <p>{{ event.adresseEvent }}</p>
+                                    <p>{{ event.nbPlaceEvent }}</p>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    {% endif %} 
+                </div>
             </div>
             <label for="prix">Prix du billet : </label> </br><!-- Ajouter le prix ici -->
             <label for="quantite">Quantité : </label>
@@ -64,6 +95,39 @@
                                 test.appendChild(option);
                             }
                         } else if (nomBillet == "Totalité du festival") {
+                            events = document.getElementById("events");
+                            events.innerHTML = "";
+                            var evenements_disponibles = response['evenements_disponibles'];
+                            if (evenements_disponibles.length == 0) {
+                                document.getElementById("error").textContent = "Il n'y a pas d'évènements disponibles pour ce festival";
+                                return;
+                            }else{
+                                document.getElementById("error").textContent = "";
+                            }
+                            for (var i = 0; i < evenements_disponibles.length; i++){
+                                var div = document.createElement("div");
+                                div.className = "event";
+                                var a = document.createElement("a");
+                                a.className = "evt";
+                                a.href = "#";
+                                var p1 = document.createElement("p");
+                                p1.textContent = evenements_disponibles[i]['nomEvent'];
+                                var p2 = document.createElement("p");
+                                p2.textContent = evenements_disponibles[i]['typeEvent'];
+                                var p3 = document.createElement("p");
+                                p3.textContent = evenements_disponibles[i]['dateHeureDebutEvent'] + " - " + evenements_disponibles[i]['dateHeureFinEvent'];
+                                var p4 = document.createElement("p");
+                                p4.textContent = evenements_disponibles[i]['adresseEvent'];
+                                var p5 = document.createElement("p");
+                                p5.textContent = evenements_disponibles[i]['nbPlaceEvent'];
+                                a.appendChild(p1);
+                                a.appendChild(p2);
+                                a.appendChild(p3);
+                                a.appendChild(p4);
+                                a.appendChild(p5);
+                                div.appendChild(a);
+                                events.appendChild(div);
+                            }
                             return;
                         }
                         test.style.display = "block";
