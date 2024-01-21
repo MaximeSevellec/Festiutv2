@@ -1,11 +1,22 @@
 .placementBillet {
-    padding-top: 10%;
+    
     display: flex;
     justify-content: center; /* Centre les éléments horizontalement */
 }
 
-.billet {
-    margin: 0 10px; /* Ajoute une marge autour de chaque billet */
+h1{
+    margin: 1%;
+    text-align: center;
+    text-decoration: underline;
+    text-underline-offset: 20%;
+    font-size: 250%;
+    padding-bottom: 1%;
+}
+
+.billet{
+    margin: 3%;
+    padding-bottom: 2%;
+    transition: transform 0.3s;
 }
 
 .div_img {
@@ -13,7 +24,6 @@
     height: auto;
     box-sizing: border-box;
     object-fit: cover;
-    padding: 20px;
     margin: 0 auto; /* Centre les éléments horizontalement */
 }
 
@@ -21,4 +31,8 @@
     width: 100%;
     height: auto;
     display: block;
+}
+
+.billet:hover{
+    transform: scale(1.3);
 }

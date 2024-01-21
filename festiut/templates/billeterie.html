@@ -2,6 +2,7 @@
 {% extends 'base.html' %}
 {% block main %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/billeterie.css') }}">
+<h1>La Billeterie</h1>
 <div class="placementBillet">
     {% for nom_billet, prix_billet in billet_jour.items() %}
         <div class="billet">

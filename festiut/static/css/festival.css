@@ -1,68 +1,29 @@
-/* festival.css */
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
+h1{
+    padding-left: 0.5%;
+    text-decoration: underline;
+    text-underline-offset: 10%;
 }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+.infoFest{
+    font-size: 130%;
 }
 
-h1 {
-    color: #333;
+.ensProg,.ensGroupe,.infoFest{
+    margin: 0.5%;
+    margin-left: 1%;
 }
 
-button {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #e0e0e0;
-}
-
-.event {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px 0;
-}
-
-.event a {
+.dateProg,.nomGroupe{
+    display: inline-block;
     text-decoration: none;
-    color: #333;
+    margin-right: 90%;
+    color: #2874A6;
+    font-size: 130%;
+    font-weight: bold;
+    transition: color 0.3s, transform 0.3s;
 }
 
-.event a:hover {
-    color: #007bff;
+.dateProg:hover, .nomGroupe:hover{
+    color: #3498DB;
+    transform: scale(1.2);
 }
-
-a {
-    text-decoration: none;
-    color: #007bff;
-}
-
-.day-link {
-    display: flex;
-    padding: 10px;
-    margin: 10px 5px; /* Ajout du padding entre les day links */
-    background-color: #000000;
-    color: #fff;
-    border-radius: 5px;
-}
-
-.day-link:hover {
-    background-color: #333333;
-}
-
-.days-container {
-    display: flex;
-}
-

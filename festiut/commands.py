@@ -30,7 +30,11 @@ def loaddb():
     print("Inserting groups...")
     db.session.add_all([
         Groupe(nomGroupe="La pluie"),
-        Groupe(nomGroupe="L'orage")
+        Groupe(nomGroupe="L'orage"),
+        Groupe(nomGroupe="Le soleil"),
+        Groupe(nomGroupe="La lune"),
+        Groupe(nomGroupe="La neige")
+
     ])
     db.session.commit()
 
@@ -38,6 +42,10 @@ def loaddb():
     print("Inserting events...")
     db.session.add_all([
         Event(nom_groupe="La pluie", idFestival=1, nomEvent="Concert de l'orchestre", typeEvent="Concert", dateHeureDebutEvent="2025-01-19 20:00:00", dateHeureFinEvent="2025-01-19 22:00:00", estGratuit=False, adresseEvent="1 rue de la Paix", nbPlaceEvent=100),
+        Event(nom_groupe="L'orage", idFestival=1, nomEvent="Concert de l'orchestre", typeEvent="Concert", dateHeureDebutEvent="2025-02-19 20:00:00", dateHeureFinEvent="2025-02-19 22:00:00", estGratuit=True, adresseEvent="99 rue de la Nuit", nbPlaceEvent=800),
+        Event(nom_groupe="La neige", idFestival=1, nomEvent="Concert de l'orchestre", typeEvent="Concert", dateHeureDebutEvent="2025-02-19 20:00:00", dateHeureFinEvent="2025-02-19 22:00:00", estGratuit=False, adresseEvent="55 rue Blanche", nbPlaceEvent=30),        
+        Event(nom_groupe="La lune", idFestival=1, nomEvent="Concert de l'orchestre", typeEvent="Concert", dateHeureDebutEvent="2025-02-19 20:00:00", dateHeureFinEvent="2025-02-19 22:00:00", estGratuit=False, adresseEvent="8 rue du Sommeil", nbPlaceEvent=55),        
+        Event(nom_groupe="Le soleil", idFestival=1, nomEvent="Concert de l'orchestre", typeEvent="Concert", dateHeureDebutEvent="2025-02-19 20:00:00", dateHeureFinEvent="2025-02-19 22:00:00", estGratuit=False, adresseEvent="3 rue du Groupe", nbPlaceEvent=10),
         Event(idFestival=1, nomEvent="Interviews de groupe", typeEvent="interview", dateHeureDebutEvent="2025-01-20 10:00:00", dateHeureFinEvent="2025-01-20 12:00:00", estGratuit=False, adresseEvent="1 rue de la Paix", nbPlaceEvent=25),
         Event(idFestival=1, nomEvent="La pluie", typeEvent="Show case", dateHeureDebutEvent="2025-01-21 20:00:00", dateHeureFinEvent="2025-01-21 22:00:00", estGratuit=False, adresseEvent="2 rue de la Paix", nbPlaceEvent=0),
     ])

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block styles %}
-    {{ super() }}
+{{ super() }}
 {% endblock %}
 {% block scripts %}
 <script>
@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block main %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/festival.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/day_detail.css')}}">
 
     <h1>{{ festival.nomFestival }}</h1>
 
@@ -39,12 +39,13 @@
     <div class="days-container">
         {% for event_day in events_by_day %}
             {% if event_day != day %}
-                <a href="{{ url_for('day_detail', festival_id=festival.idFestival, day=event_day.strftime('%Y-%m-%d')) }}" class="day-link">{{ event_day.strftime('%Y-%m-%d') }}</a>
+                <a class="day" href="{{ url_for('day_detail', festival_id=festival.idFestival, day=event_day.strftime('%Y-%m-%d')) }}" class="day-link">{{ event_day.strftime('%Y-%m-%d') }}</a>
             {% endif %}
         {% endfor %}
     </div>
-    
-    {% for event in events_for_day %}
+    <p class="info">Passez la souris sur les images pour plus d'informations</p>
+    <div class="affichageDetail">
+        {% for event in events_for_day %}
     <div class="event">
         <a class="evt" href="#">
             <p>{{ event.nomEvent }}</p>
@@ -58,6 +59,7 @@
             {{ event.imageEvent | byte_to_image | safe }}
         </a>
     </div>
-    
+
     {% endfor %}
+    </div>   
 {% endblock %}
