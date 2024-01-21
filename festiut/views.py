@@ -1,7 +1,7 @@
 from itertools import combinations
 from markupsafe import Markup
 from .app import app, login_manager
-from flask import render_template,request, redirect, url_for, jsonify
+from flask import render_template,request, redirect, url_for, jsonify, flash
 from .models import *
 from hashlib import sha256
 from flask_login import login_user, current_user, logout_user
@@ -204,6 +204,7 @@ def login():
         user = f.get_authenticated_user()
         if user:
             login_user(user)
+            flash ("Bon retour parmis nous " + user.nom, "success")
             return redirect(url_for("home"))
     return render_template("login.html", form=f)
 
@@ -214,6 +215,7 @@ def register():
         user = f.get_register_user()
         if user:
             login_user(user)
+            flash ("Bienvenue parmis nous " + user.nom, "success")
             return redirect(url_for("home"))
     return render_template("register.html", form=f)
 
